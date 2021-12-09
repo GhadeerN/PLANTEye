@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">PLANTEye</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_greeting">Hello</string>
+    <string name="login_user_msg">Let’s learn more about plants!</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="question_already_have_account">Already Have Account?</string>
+    <string name="question_dont_have_account">Don\'t Have Account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="register_greeting">Welcome</string>
+    <string name="register_user_msg">Join us in PlantEye and learn more about plants!</string>
+    <string name="register_full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Sign Up</string>
+    <string name="articles">Articles</string>
+    <string name="scan_and_diagnose">Scan and diagnose the plant</string>
+    <string name="floating_button_description">Floating button to open the camera for the user</string>
+    <string name="diagnose">Diagnose</string>
 </resources>

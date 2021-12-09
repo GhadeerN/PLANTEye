@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--  My App Colors  -->
+    <color name="primary_color_green">#009688</color>
+    <color name="float_color_light_green">#03DAC5</color>
+
+    <!--  Transparent color: https://stackoverflow.com/questions/11285961/how-to-make-a-background-20-transparent-on-android  -->
+    <color name="scan_btn_transparent_green">#3357A99A</color>
 </resources>
