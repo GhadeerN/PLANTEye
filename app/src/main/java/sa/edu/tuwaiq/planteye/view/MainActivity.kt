@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.ActivityMainBinding
+import sa.edu.tuwaiq.planteye.repositories.ApiServiceRepository
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -12,6 +13,10 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //TODO Move it to splash screen later
+        ApiServiceRepository.init()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
