@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/articalesFragment">
+
+    <fragment
+        android:id="@+id/articalesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.ArticalesFragment"
+        android:label="fragment_articales"
+        tools:layout="@layout/fragment_articales" />
+    <fragment
+        android:id="@+id/diagnosesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.DiagnosesFragment"
+        android:label="fragment_diagnoses"
+        tools:layout="@layout/fragment_diagnoses" />
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="sa.edu.tuwaiq.planteye.view.identity.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/identifyFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.IdentifyFragment"
+        android:label="fragment_identify"
+        tools:layout="@layout/fragment_identify" />
+</navigation>

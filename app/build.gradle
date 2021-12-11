@@ -66,4 +66,7 @@ dependencies {
     // Glide - For image display
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
+
+    // Matisse - local image selector
+    implementation 'com.zhihu.android:matisse:0.5.3-beta3'
 }

@@ -22,7 +22,7 @@
         <Button
             android:id="@+id/diagnose_scan_button"
             style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="293dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:backgroundTint="@color/scan_btn_transparent_green"

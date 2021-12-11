@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "Login Successfully")
-                        findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                     } else
                         Log.d(TAG, "Task is not successful")
                 }
