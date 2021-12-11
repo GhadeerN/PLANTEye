@@ -21,4 +21,7 @@
     <string name="scan_and_diagnose">Scan and diagnose the plant</string>
     <string name="floating_button_description">Floating button to open the camera for the user</string>
     <string name="diagnose">Diagnose</string>
+    <string name="reset_password">Reset Your Password</string>
+    <string name="happen_to_best_msg">It happen to the best of us! Enter your email and we’ll send you the reset instructions.</string>
+    <string name="send_email">Send Email</string>
 </resources>

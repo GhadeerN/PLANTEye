@@ -12,17 +12,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="15dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11">
 
         <TextView
             android:id="@+id/textView"
             style="@style/BoldHeaderStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
             android:text="@string/login_greeting"
             android:textColor="@color/black" />
 
@@ -77,8 +80,8 @@
                 android:text="@string/remember_me" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
+                android:id="@+id/forget_password_textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
@@ -86,11 +89,12 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/register_button"
+            android:id="@+id/login_button"
             style="@style/SolidButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="18dp"
             android:text="@string/login" />
 
         <LinearLayout

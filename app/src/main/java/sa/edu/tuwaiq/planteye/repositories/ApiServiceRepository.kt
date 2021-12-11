@@ -21,10 +21,12 @@ class ApiServiceRepository {
     //TODO Shared preference maybe here
 
     // Identify Plant
-    suspend fun identifyPlant(identifyPlantBody: IdentifyPlantBody) = retrofitApi.identifyPlant(identifyPlantBody)
+    suspend fun identifyPlant(identifyPlantBody: IdentifyPlantBody) =
+        retrofitApi.identifyPlant(identifyPlantBody)
 
     // Disease Diagnoses
-    suspend fun diagnosePlant(identifyDiseaseBody: IdentifyDiseaseBody) = retrofitApi.identifyPlantDisease(identifyDiseaseBody)
+    suspend fun diagnosePlant(identifyDiseaseBody: IdentifyDiseaseBody) =
+        retrofitApi.identifyPlantDisease(identifyDiseaseBody)
 
     companion object {
         //TODO may need context here!

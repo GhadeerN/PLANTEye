@@ -5,6 +5,7 @@ import android.os.Bundle
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.ActivityMainBinding
 import sa.edu.tuwaiq.planteye.repositories.ApiServiceRepository
+import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -16,6 +17,9 @@ class MainActivity : AppCompatActivity() {
 
         //TODO Move it to splash screen later
         ApiServiceRepository.init()
+
+        //TODO Make sure from M&Saad if this is right to be called here!
+        FirestoreServiceRepository.init()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
