@@ -1,7 +1,12 @@
 package sa.edu.tuwaiq.planteye.view
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.ActivityMainBinding
 import sa.edu.tuwaiq.planteye.repositories.ApiServiceRepository

@@ -24,4 +24,6 @@
     <string name="reset_password">Reset Your Password</string>
     <string name="happen_to_best_msg">It happen to the best of us! Enter your email and we’ll send you the reset instructions.</string>
     <string name="send_email">Send Email</string>
+    <string name="more_info">More Info</string>
+    <string name="add_note">Add Note</string>
 </resources>

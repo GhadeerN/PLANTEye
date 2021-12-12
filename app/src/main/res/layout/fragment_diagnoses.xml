@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-            android:backgroundTint="@color/scan_btn_transparent_green"
+            android:backgroundTint="@color/light_green_more_info"
             android:text="@string/scan_and_diagnose"
             android:textAllCaps="false"
             android:textColor="@color/primary_color_green"
