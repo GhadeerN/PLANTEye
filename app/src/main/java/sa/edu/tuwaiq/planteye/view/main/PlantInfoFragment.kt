@@ -1,60 +1,83 @@
 package sa.edu.tuwaiq.planteye.view.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.R
+import sa.edu.tuwaiq.planteye.databinding.FragmentPlantInfoBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val TAG = "PlantInfoFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PlantInfoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PlantInfoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentPlantInfoBinding
+    private val viewModel: PlantInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plant_info, container, false)
+        binding = FragmentPlantInfoBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlantInfoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlantInfoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observers()
+
+        viewModel.callPlantInfo(viewModel.image)
+
+    }
+
+    private fun observers() {
+        viewModel.plantInfoLiveData.observe(viewLifecycleOwner, {
+            binding.progressBar.animate().alpha(0f).setDuration(1000)
+
+            // Set all plant details in the fragment views
+            val suggestion = it.suggestions[0]
+            binding.detailPlantNameTextView.text = suggestion.plantName
+            binding.detailsFamilyTextView.text = suggestion.plantDetails.taxonomy.family
+            binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy.kingdom
+            binding.detailsDescriptionTextView.text =
+                suggestion.plantDetails.wikiDescription.value
+
+            val url = suggestion.plantDetails.wikiDescription.citation
+
+            // Implicit intent to direct the user to the plant info web page
+            binding.moreInfoButton.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
             }
+
+            // Show the info layout
+            binding.infoLinearLayout.visibility = View.VISIBLE
+
+            // Save plant info
+            binding.savePlantButton.setOnClickListener {
+                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, suggestion)
+            }
+        })
+
+        // Error
+        viewModel.plantInfoErrorLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                binding.progressBar.animate().alpha(0f).setDuration(1000)
+                binding.errorMsgTextView.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireActivity(),
+                    "Timeout Error: Sorry, please check you intent connection and try again\n $it",
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModel.plantInfoErrorLiveData.postValue(null)
+            }
+        })
     }
 }

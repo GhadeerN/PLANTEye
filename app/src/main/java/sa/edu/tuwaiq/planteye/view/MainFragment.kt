@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -23,6 +24,7 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentMainBinding
+import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
 import java.io.File
 
 private const val TAG = "MainFragment"
@@ -33,6 +35,9 @@ class MainFragment : Fragment() {
     private lateinit var navController: NavController
     private val IMAGE_PICKER = 0
     private val REQUEST_CODE_CP = 1
+
+    // Create instance of the viewModel
+    private val viewModel: PlantInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +69,7 @@ class MainFragment : Fragment() {
                     requireActivity(), Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                Log.d(TAG,"PERMISSION_GRANTED")
+                Log.d(TAG, "PERMISSION_GRANTED")
                 showImagePicker()
             } else
                 checkCameraStoragePermission()
@@ -76,7 +81,7 @@ class MainFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == IMAGE_PICKER && resultCode == RESULT_OK) {
-            Log.d(TAG,"onActivityResult() inside IF")
+            Log.d(TAG, "onActivityResult() inside IF")
             // Get the image path - [0] because we'll accept only one image
             val imagePath = Matisse.obtainPathResult(data)[0]
 
@@ -86,22 +91,27 @@ class MainFragment : Fragment() {
             // Convert image to Bitmap to display it in the imageView
             val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
-            // Show the image and place it in the imageView
-            binding.plantdetailsImageView.visibility = View.VISIBLE
-            binding.plantdetailsImageView.setImageBitmap(imageBitmap)
+            // Set the encoded image to the viewModel for further usage
+            viewModel.imageBitmap = imageBitmap
 
-            // Progress bar till the result back from the API
+            // Show the image and place it in the imageView
+//            binding.plantdetailsImageView.visibility = View.VISIBLE
+//            binding.plantdetailsImageView.setImageBitmap(imageBitmap)
 
             // Show the bottom sheet modal with the result
             val modalBottomSheet = DetailsBottomSheetModal()
+
+            // To force the user to click (X) to close the bottom sheet, instead of clicking outside it or swipe it down to close
+            modalBottomSheet.isCancelable = false
             modalBottomSheet.show(requireActivity().supportFragmentManager, "ModalBottomSheet")
 
             // Encode the image file to Base64, and POST it to the identify API
             val encodedImage = base64Encoder(imageFile)
-            Log.d(TAG, "Encoded Image: $encodedImage")
-            //TODO Send it to the api
+            viewModel.image = encodedImage
 
-            // Hide the image on Bottom sheet modal dismiss
+            Log.d(TAG, "Encoded Image: $encodedImage")
+
+
         }
     }
 

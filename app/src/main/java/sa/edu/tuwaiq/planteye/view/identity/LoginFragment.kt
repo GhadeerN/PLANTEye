@@ -44,8 +44,10 @@ class LoginFragment : Fragment() {
                     if (task.isSuccessful) {
                         Log.d(TAG, "Login Successfully")
                         findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-                    } else
+                    } else {
+                        Toast.makeText(requireActivity(), "Invalid email or password", Toast.LENGTH_LONG).show()
                         Log.d(TAG, "Task is not successful")
+                    }
                 }
             } else
                 Toast.makeText(requireContext(), "Please fill in the require fields", Toast.LENGTH_SHORT).show()

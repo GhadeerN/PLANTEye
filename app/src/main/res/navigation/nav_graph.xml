@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment2">
+    app:startDestination="@id/secondaryFragment2">
     <fragment
         android:id="@+id/mainFragment2"
         android:name="sa.edu.tuwaiq.planteye.view.MainFragment"

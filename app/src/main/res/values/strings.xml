@@ -26,4 +26,8 @@
     <string name="send_email">Send Email</string>
     <string name="more_info">More Info</string>
     <string name="add_note">Add Note</string>
+    <string name="save_this_plant">Save this plant</string>
+    <string name="kingdom">Kingdom</string>
+    <string name="family">Family</string>
+    <string name="description">Description</string>
 </resources>
