@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
                 //TODO Take the user id from the live data and put it in the shared pref
 
                 // If login done successfully direct the user to the main fragments (Articles)
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
                 viewModel.loginLiveData.postValue(null)
             }
         })

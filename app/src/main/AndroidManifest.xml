@@ -17,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PLANTEye">
         <activity
+            android:name=".view.Splash"
+            android:theme="@style/SplashTheme"
+            android:exported="false" >
+        </activity>
+        <activity
             android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -26,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <!-- This provider is for the image selector - to save it in the specified path  -->
+        <!-- This provider is for the image selector - to save it in the specified path -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="sa.edu.tuwaiq.planteye"

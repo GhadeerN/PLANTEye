@@ -25,31 +25,4 @@ class ArticalesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
-
-    // Menu ----------------------------------------------------------------------------------------
-    // This fun will listen to the selected item
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.profile -> findNavController().navigate(R.id.action_articalesFragment_to_profileFragment2)
-            R.id.saved_plants -> findNavController().navigate(R.id.action_articalesFragment_to_savedPlantsFragment)
-            R.id.log_out -> {
-                //TODO Logout from the firebaseAuth & clear the shared pref
-            }
-        }
-        return super.onOptionsItemSelected(item)
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // This will connect the main_menu.xml with the action/tool bar :)
-        requireActivity().menuInflater.inflate(R.menu.main_menu, menu)
-
-        // Create instance of each item inside the menu
-        val profile = menu.findItem(R.id.profile)
-        val logout = menu.findItem(R.id.log_out)
-        val savedPlants = menu.findItem(R.id.saved_plants)
-
-        //TODO Here check the shared pref login state if the user was not logged in hide the action
-        // bar menu items, else show em
-    }
 }

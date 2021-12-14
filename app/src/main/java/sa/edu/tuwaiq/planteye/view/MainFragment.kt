@@ -2,21 +2,22 @@ package sa.edu.tuwaiq.planteye.view
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 
 import com.zhihu.matisse.Matisse
@@ -24,10 +25,14 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentMainBinding
+import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
 import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
 import java.io.File
 
 private const val TAG = "MainFragment"
+const val FILE_NAME = "User log"
+const val STATE = "login_state"
+const val USER_ID = "user_id"
 
 class MainFragment : Fragment() {
 
@@ -39,10 +44,32 @@ class MainFragment : Fragment() {
     // Create instance of the viewModel
     private val viewModel: PlantInfoViewModel by activityViewModels()
 
+    // Shared Preference
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefEditor: SharedPreferences.Editor
+
+    // The user login state
+    var state = false
+
+    // Menu Items
+    lateinit var profile: MenuItem
+    lateinit var logout: MenuItem
+    lateinit var login: MenuItem
+    lateinit var savedPlants: MenuItem
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // This line is to show the menu items in the action/tool bar
+        setHasOptionsMenu(true)
+
+        // Shared pref initialization
+        sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+        sharedPrefEditor = sharedPref.edit()
+
+        state = sharedPref.getBoolean(STATE, false)
+
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -65,14 +92,18 @@ class MainFragment : Fragment() {
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
 
         binding.cameraFloatingActionButton.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    requireActivity(), Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                Log.d(TAG, "PERMISSION_GRANTED")
-                showImagePicker()
-            } else
-                checkCameraStoragePermission()
+            if (state) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireActivity(), Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Log.d(TAG, "PERMISSION_GRANTED")
+                    showImagePicker()
+                } else
+                    checkCameraStoragePermission()
+            } else {
+
+            }
         }
     }
 
@@ -94,10 +125,6 @@ class MainFragment : Fragment() {
             // Set the encoded image to the viewModel for further usage
             viewModel.imageBitmap = imageBitmap
 
-            // Show the image and place it in the imageView
-//            binding.plantdetailsImageView.visibility = View.VISIBLE
-//            binding.plantdetailsImageView.setImageBitmap(imageBitmap)
-
             // Show the bottom sheet modal with the result
             val modalBottomSheet = DetailsBottomSheetModal()
 
@@ -110,8 +137,52 @@ class MainFragment : Fragment() {
             viewModel.image = encodedImage
 
             Log.d(TAG, "Encoded Image: $encodedImage")
+        }
+    }
 
+    // Menu ----------------------------------------------------------------------------------------
+    // This fun will listen to the selected item
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.profile -> findNavController().navigate(R.id.action_mainFragment2_to_profileFragment)
+            R.id.saved_plants -> findNavController().navigate(R.id.action_mainFragment2_to_savedPlantsFragment2)
+            R.id.log_out -> {
+                // Hide the menu items for logged in user - and show login
+                profile.isVisible = false
+                logout.isVisible = false
+                savedPlants.isVisible = false
+                login.isVisible = true
 
+                sharedPrefEditor.putBoolean(STATE, false)
+                sharedPrefEditor.putString(USER_ID, "")
+                sharedPrefEditor.commit()
+
+                FirestoreServiceRepository.get().firebaseAuth.signOut()
+            }
+            R.id.login_menu -> findNavController().navigate(R.id.action_mainFragment2_to_loginFragment)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // This will connect the main_menu.xml with the action/tool bar :)
+        requireActivity().menuInflater.inflate(R.menu.main_menu, menu)
+
+        // Create instance of each item inside the menu
+        profile = menu.findItem(R.id.profile)
+        logout = menu.findItem(R.id.log_out)
+        savedPlants = menu.findItem(R.id.saved_plants)
+        login = menu.findItem(R.id.login_menu)
+
+        /* Here check the shared pref login state if the user was not logged in hide the action
+           bar menu items, else show em */
+        if (!state) { // false -> ! false -> true -> hide icons :)
+            logout.isVisible = false
+            profile.isVisible = false
+            savedPlants.isVisible = false
+            login.isVisible = true
+        } else {
+            login.isVisible = false
         }
     }
 

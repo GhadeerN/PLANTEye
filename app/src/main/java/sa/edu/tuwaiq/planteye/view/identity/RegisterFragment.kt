@@ -96,7 +96,7 @@ class RegisterFragment : Fragment() {
         registerViewModel.registerLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 progressDialog.dismiss()
-                findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
+//                findNavController().navigate(R.id.action_loginFragment_to_nav_graph)
                 registerViewModel.registerLiveData.postValue(null)
             }
         })
