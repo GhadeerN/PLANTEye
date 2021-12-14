@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class PlantDetails(
     @SerializedName("common_names")
-    val commonNames: List<String>,
+    val commonNames: List<String>? = null,
     @SerializedName("scientific_name")
-    val scientificName: String,
+    val scientificName: String? = null,
     @SerializedName("structured_name")
-    val structuredName: StructuredName,
+    val structuredName: StructuredName? = null,
     @SerializedName("taxonomy")
-    val taxonomy: Taxonomy,
+    val taxonomy: Taxonomy? = null,
     @SerializedName("url")
-    val url: String,
+    val url: String? = null,
     @SerializedName("wiki_description")
-    val wikiDescription: WikiDescription
+    val wikiDescription: WikiDescription? = null
 )

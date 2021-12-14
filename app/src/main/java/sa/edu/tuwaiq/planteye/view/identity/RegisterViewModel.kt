@@ -51,7 +51,8 @@ class RegisterViewModel : ViewModel() {
                 val response = firestore.saveUser(userId, user)
                 response.addOnCompleteListener {
                     if (it.isSuccessful) {
-                        registerLiveData.postValue("Success")
+                        // Post the user id here
+                        registerLiveData.postValue(firestore.firebaseAuth.currentUser!!.uid)
                         Log.d(TAG, "Register success: $response")
                     } else {
                         Log.d(TAG, "Fail register")

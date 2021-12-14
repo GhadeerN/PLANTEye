@@ -6,5 +6,5 @@ import sa.edu.tuwaiq.planteye.model.Suggestion
 data class User(
     val fullName: String = "",
     val email: String = "",
-    var savedPlants: MutableList<Suggestion> = mutableListOf()
+    var savedPlants: MutableList<PlantDataModel> = mutableListOf()
 )

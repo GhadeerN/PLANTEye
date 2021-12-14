@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class Taxonomy(
     @SerializedName("class")
-    val classX: String,
+    val classX: String? = null,
     @SerializedName("family")
-    val family: String,
+    val family: String? = null,
     @SerializedName("genus")
-    val genus: String,
+    val genus: String? = null,
     @SerializedName("kingdom")
-    val kingdom: String,
+    val kingdom: String? = null,
     @SerializedName("order")
-    val order: String,
+    val order: String? = null,
     @SerializedName("phylum")
-    val phylum: String
+    val phylum: String? = null
 )

@@ -25,7 +25,7 @@ class LoginViewModel : ViewModel() {
 
                 response.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        // TODO post user id to use it in sharedPref
+                        // Post user id to use it in sharedPref
                         loginLiveData.postValue(firestore.firebaseAuth.currentUser!!.uid)
                         Log.d(TAG, "Register successfully!, response: $response")
 

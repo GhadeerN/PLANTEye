@@ -1,6 +1,8 @@
 package sa.edu.tuwaiq.planteye.view.identity
 
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,6 +24,9 @@ import kotlinx.coroutines.withContext
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentRegisterBinding
 import sa.edu.tuwaiq.planteye.model.collections.User
+import sa.edu.tuwaiq.planteye.view.FILE_NAME
+import sa.edu.tuwaiq.planteye.view.STATE
+import sa.edu.tuwaiq.planteye.view.USER_ID
 import java.lang.Exception
 
 private const val TAG = "RegisterFragment"
@@ -37,6 +42,10 @@ class RegisterFragment : Fragment() {
     //TODO Change it to something cuter :)
     private lateinit var progressDialog: ProgressDialog
 
+    // Shared Preference
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefEditor: SharedPreferences.Editor
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +55,11 @@ class RegisterFragment : Fragment() {
             setTitle("Loading...")
             setCancelable(false)
         }
+
+        // Shared pref initialization
+        sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+        sharedPrefEditor = sharedPref.edit()
+
         // Inflate the layout
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
@@ -96,7 +110,12 @@ class RegisterFragment : Fragment() {
         registerViewModel.registerLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 progressDialog.dismiss()
-                //TODO EDIT the shared preference
+
+                // Change the user login state in the sharePref
+                sharedPrefEditor.putBoolean(STATE, true)
+                sharedPrefEditor.putString(USER_ID, it)
+                sharedPrefEditor.commit()
+
                 findNavController().navigate(R.id.action_registerFragment_to_mainFragment2)
                 registerViewModel.registerLiveData.postValue(null)
             }

@@ -44,13 +44,13 @@ class PlantInfoFragment : Fragment() {
 
             // Set all plant details in the fragment views
             val plantData = it
-            val suggestion = plantData.suggestions[0]
+            val suggestion = plantData.suggestions!![0]
 
             binding.detailPlantNameTextView.text = suggestion.plantName
-            binding.detailsFamilyTextView.text = suggestion.plantDetails.taxonomy.family
-            binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy.kingdom
+            binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
+            binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
             binding.detailsDescriptionTextView.text =
-                suggestion.plantDetails.wikiDescription.value
+                suggestion.plantDetails.wikiDescription!!.value
 
             val url = suggestion.plantDetails.wikiDescription.citation
 

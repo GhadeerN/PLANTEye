@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class StructuredName(
     @SerializedName("genus")
-    val genus: String,
+    val genus: String? = null,
     @SerializedName("species")
-    val species: String
+    val species: String? = null
 )

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Image(
     @SerializedName("file_name")
-    val fileName: String,
+    val fileName: String? = null,
     @SerializedName("url")
-    val url: String
+    val url: String? = null
 )

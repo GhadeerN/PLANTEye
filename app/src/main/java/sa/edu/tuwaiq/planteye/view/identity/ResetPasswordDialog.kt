@@ -47,6 +47,7 @@ class ResetPasswordDialog: DialogFragment() {
         sentEmail.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             if (email.isNotEmpty() && email.isNotBlank()) {
+                //TODO Do it with MVVM
                 Firebase.auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "Reset password email sent successfully")

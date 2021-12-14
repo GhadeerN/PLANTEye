@@ -27,11 +27,11 @@
             <ImageView
                 android:id="@+id/iitem_plant_imageView"
                 android:layout_width="140dp"
-                android:layout_height="wrap_content"
+                android:layout_height="140dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:clipToOutline="true"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars" />
         </androidx.cardview.widget.CardView>
 
@@ -103,7 +103,7 @@
 
                     <TextView
                         android:id="@+id/item_kingdom_textView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="55dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/kingdom"
@@ -111,7 +111,7 @@
 
                     <TextView
                         android:id="@+id/item_family_textView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/family"
@@ -131,6 +131,7 @@
                     android:layout_height="wrap_content"
                     android:lines="2"
                     android:maxLines="2"
+                    android:singleLine="true"
                     android:text="Cactus spines are produced from specialized structures..."
                     android:textColor="@color/black" />
 
