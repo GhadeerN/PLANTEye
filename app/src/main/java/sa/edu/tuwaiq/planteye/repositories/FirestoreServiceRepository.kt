@@ -6,14 +6,22 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.model.Suggestion
 import sa.edu.tuwaiq.planteye.model.collections.User
 
 class FirestoreServiceRepository {
     private val database = FirebaseFirestore.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
 
     // Collections
     private val userCollection = database.collection("users")
+
+    // Login
+    fun login(email: String, password: String)= firebaseAuth.signInWithEmailAndPassword(email,password)
+
+    // Register
+    fun register(email: String, password: String) = firebaseAuth.createUserWithEmailAndPassword(email, password)
 
     // Insert a user into users collection
     /** This function is to save a user info to the Firestore
@@ -23,7 +31,7 @@ class FirestoreServiceRepository {
     // Get user info
 
     // Save this plant
-    fun savePlant(userId: String, plant: Suggestion) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
+    fun savePlant(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
 
 
     // This companion object is to makes our Firebase Service a singleton

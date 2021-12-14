@@ -38,11 +38,14 @@ class PlantInfoFragment : Fragment() {
     }
 
     private fun observers() {
+        // Plant data observer
         viewModel.plantInfoLiveData.observe(viewLifecycleOwner, {
             binding.progressBar.animate().alpha(0f).setDuration(1000)
 
             // Set all plant details in the fragment views
-            val suggestion = it.suggestions[0]
+            val plantData = it
+            val suggestion = plantData.suggestions[0]
+
             binding.detailPlantNameTextView.text = suggestion.plantName
             binding.detailsFamilyTextView.text = suggestion.plantDetails.taxonomy.family
             binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy.kingdom
@@ -62,18 +65,28 @@ class PlantInfoFragment : Fragment() {
 
             // Save plant info
             binding.savePlantButton.setOnClickListener {
-                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, suggestion)
+                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, plantData)
             }
         })
 
-        // Error
+        // Save plant observer
+        viewModel.savePlantLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
+                viewModel.savePlantLiveData.postValue(null)
+                return@let
+            }
+            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
+        })
+
+        // Error observer
         viewModel.plantInfoErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 binding.progressBar.animate().alpha(0f).setDuration(1000)
                 binding.errorMsgTextView.visibility = View.VISIBLE
                 Toast.makeText(
                     requireActivity(),
-                    "Timeout Error: Sorry, please check you intent connection and try again\n $it",
+                    "Timeout Error: Sorry, please check you intent connection and try again",
                     Toast.LENGTH_LONG
                 ).show()
                 viewModel.plantInfoErrorLiveData.postValue(null)

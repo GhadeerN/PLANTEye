@@ -76,31 +76,18 @@ class RegisterFragment : Fragment() {
                 if (password == confirmPassword) {
                     progressDialog.show()
                     Log.d(TAG, "Inside if")
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                firebaseUser = task.result!!.user!!
-                                Log.d(TAG, "User registered successfully!")
-
-                                // Insert user information into the users collection (fullName, email)
-                                registerViewModel.saveUser(
-                                    firebaseUser.uid,
-                                    User(name, firebaseUser.email.toString())
-                                )
-                                Log.d(TAG, firebaseUser.email.toString())
-                            }
-                        }
+                    registerViewModel.register(User(name, email), password)
                 } else
                     Toast.makeText(
                         requireActivity(),
                         "Your password does not mach confirm password!",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
             } else
                 Toast.makeText(
                     requireActivity(),
                     "Please make sure to fill all the required fields",
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_LONG
                 ).show()
         }
     }

@@ -9,7 +9,14 @@
         android:id="@+id/articalesFragment"
         android:name="sa.edu.tuwaiq.planteye.view.main.ArticalesFragment"
         android:label="fragment_articales"
-        tools:layout="@layout/fragment_articales" />
+        tools:layout="@layout/fragment_articales" >
+        <action
+            android:id="@+id/action_articalesFragment_to_profileFragment2"
+            app:destination="@id/profileFragment2" />
+        <action
+            android:id="@+id/action_articalesFragment_to_savedPlantsFragment"
+            app:destination="@id/savedPlantsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/diagnosesFragment"
         android:name="sa.edu.tuwaiq.planteye.view.main.DiagnosesFragment"
@@ -25,4 +32,9 @@
         android:name="sa.edu.tuwaiq.planteye.view.main.IdentifyFragment"
         android:label="fragment_identify"
         tools:layout="@layout/fragment_identify" />
+    <fragment
+        android:id="@+id/savedPlantsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantsFragment"
+        android:label="fragment_saved_plants"
+        tools:layout="@layout/fragment_saved_plants" />
 </navigation>

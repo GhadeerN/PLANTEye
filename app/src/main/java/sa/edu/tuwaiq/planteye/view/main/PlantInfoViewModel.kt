@@ -53,7 +53,7 @@ class PlantInfoViewModel: ViewModel() {
 
 
     // Save plant to the user data
-    fun savePlant(userId: String, plant: Suggestion) {
+    fun savePlant(userId: String, plant: PlantDataModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = firebaseRepo.savePlant(userId, plant)
