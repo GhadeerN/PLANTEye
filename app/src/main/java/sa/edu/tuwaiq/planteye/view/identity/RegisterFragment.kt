@@ -96,7 +96,8 @@ class RegisterFragment : Fragment() {
         registerViewModel.registerLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 progressDialog.dismiss()
-//                findNavController().navigate(R.id.action_loginFragment_to_nav_graph)
+                //TODO EDIT the shared preference
+                findNavController().navigate(R.id.action_registerFragment_to_mainFragment2)
                 registerViewModel.registerLiveData.postValue(null)
             }
         })

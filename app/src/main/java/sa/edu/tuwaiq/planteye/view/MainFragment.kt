@@ -49,7 +49,7 @@ class MainFragment : Fragment() {
     private lateinit var sharedPrefEditor: SharedPreferences.Editor
 
     // The user login state
-    var state = false
+//    var state = false
 
     // Menu Items
     lateinit var profile: MenuItem
@@ -68,7 +68,7 @@ class MainFragment : Fragment() {
         sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
         sharedPrefEditor = sharedPref.edit()
 
-        state = sharedPref.getBoolean(STATE, false)
+//        state = sharedPref.getBoolean(STATE, false)
 
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
@@ -92,7 +92,7 @@ class MainFragment : Fragment() {
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
 
         binding.cameraFloatingActionButton.setOnClickListener {
-            if (state) {
+            if (sharedPref.getBoolean(STATE, false)) {
                 if (ActivityCompat.checkSelfPermission(
                         requireActivity(), Manifest.permission.CAMERA
                     ) == PackageManager.PERMISSION_GRANTED
@@ -176,7 +176,7 @@ class MainFragment : Fragment() {
 
         /* Here check the shared pref login state if the user was not logged in hide the action
            bar menu items, else show em */
-        if (!state) { // false -> ! false -> true -> hide icons :)
+        if (!sharedPref.getBoolean(STATE, false)) { // false -> ! false -> true -> hide icons :)
             logout.isVisible = false
             profile.isVisible = false
             savedPlants.isVisible = false

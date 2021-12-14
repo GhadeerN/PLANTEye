@@ -1,6 +1,8 @@
 package sa.edu.tuwaiq.planteye.view.identity
 
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentLoginBinding
+import sa.edu.tuwaiq.planteye.view.FILE_NAME
+import sa.edu.tuwaiq.planteye.view.STATE
+import sa.edu.tuwaiq.planteye.view.USER_ID
 
 private const val TAG = "LoginFragment"
 class LoginFragment : Fragment() {
@@ -20,9 +25,11 @@ class LoginFragment : Fragment() {
     lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by activityViewModels()
 
-    var auth = FirebaseAuth.getInstance()
-
     private lateinit var progressDialog: ProgressDialog
+
+    // Shared Preference
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefEditor: SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +40,10 @@ class LoginFragment : Fragment() {
             setTitle("Loading..")
             setCancelable(false)
         }
+
+        // Shared pref initialization
+        sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+        sharedPrefEditor = sharedPref.edit()
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
@@ -72,7 +83,10 @@ class LoginFragment : Fragment() {
             it?.let {
                 progressDialog.dismiss()
 
-                //TODO Take the user id from the live data and put it in the shared pref
+                // Take the user id from the live data and put it in the shared pref
+                sharedPrefEditor.putString(USER_ID, it)
+                sharedPrefEditor.putBoolean(STATE, true)
+                sharedPrefEditor.commit()
 
                 // If login done successfully direct the user to the main fragments (Articles)
                 findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
