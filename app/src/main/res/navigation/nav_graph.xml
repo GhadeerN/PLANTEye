@@ -52,5 +52,16 @@
         android:id="@+id/savedPlantsFragment2"
         android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantsFragment"
         android:label="@string/saved_plants"
-        tools:layout="@layout/fragment_saved_plants" />
+        tools:layout="@layout/fragment_saved_plants" >
+        <action
+            android:id="@+id/action_savedPlantsFragment2_to_savedPlantDetailsFragment"
+            app:destination="@id/savedPlantDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedPlantDetailsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantDetailsFragment"
+        android:label="fragment_saved_plant_details"
+        tools:layout="@layout/fragment_saved_plant_details" />
 </navigation>

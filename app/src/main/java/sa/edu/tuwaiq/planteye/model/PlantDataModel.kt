@@ -30,5 +30,8 @@ data class PlantDataModel(
     @SerializedName("suggestions")
     val suggestions: List<Suggestion>? = null,
     @SerializedName("uploaded_datetime")
-    val uploadedDatetime: Double? = null
+    val uploadedDatetime: Double? = null,
+
+    // User note
+    var note: String = ""
 )

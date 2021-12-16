@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import sa.edu.tuwaiq.planteye.view.main.NoteFragment
+import sa.edu.tuwaiq.planteye.view.main.PlantDetailsPageFragment
 import sa.edu.tuwaiq.planteye.view.main.PlantInfoFragment
 
 // This adapter is to run the view pager with fragments
@@ -19,7 +20,8 @@ class DetailFragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
         // Switch between fragments
         return when(position) {
             1 -> NoteFragment()
-            0 -> PlantInfoFragment()
+//            0 -> PlantInfoFragment() //TODO
+            0 -> PlantDetailsPageFragment()
             else -> Fragment()
         }
     }

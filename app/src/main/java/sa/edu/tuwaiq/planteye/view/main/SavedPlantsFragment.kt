@@ -19,6 +19,7 @@ import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.USER_ID
 import sa.edu.tuwaiq.planteye.view.adapters.SavedPlantsAdapter
 
+/*  The fragment where all user saved plants shown */
 private const val TAG = "SavedPlantsFragment"
 class SavedPlantsFragment : Fragment() {
 
@@ -49,7 +50,7 @@ class SavedPlantsFragment : Fragment() {
 
         observers()
 
-        plantsAdapter = SavedPlantsAdapter(requireActivity())
+        plantsAdapter = SavedPlantsAdapter(requireActivity(), viewModel)
         binding.savedPlantsRecycler.adapter = plantsAdapter
 
         viewModel.callSavedPlants(sharedPref.getString(USER_ID, "")!!)

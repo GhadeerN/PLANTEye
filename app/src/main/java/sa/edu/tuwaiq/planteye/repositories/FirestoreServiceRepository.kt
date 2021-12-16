@@ -34,8 +34,10 @@ class FirestoreServiceRepository {
     fun savePlant(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
 
     // Get user saved Plants info
-//    fun savedPlants() = userCollection
     fun savedPlants(userId: String) = userCollection.document(userId)
+
+    // Update the user note
+    fun updateNote(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
 
     // This companion object is to makes our Firebase Service a singleton
     companion object {

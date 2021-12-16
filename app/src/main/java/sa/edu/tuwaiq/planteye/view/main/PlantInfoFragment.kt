@@ -21,8 +21,8 @@ class PlantInfoFragment : Fragment() {
     private val viewModel: PlantInfoViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPlantInfoBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,7 +50,7 @@ class PlantInfoFragment : Fragment() {
             binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
             binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
             binding.detailsDescriptionTextView.text =
-                suggestion.plantDetails.wikiDescription!!.value
+                    suggestion.plantDetails.wikiDescription!!.value
 
             val url = suggestion.plantDetails.wikiDescription.citation
 
@@ -63,20 +63,21 @@ class PlantInfoFragment : Fragment() {
             // Show the info layout
             binding.infoLinearLayout.visibility = View.VISIBLE
 
+            // Note click listener - show the note edit text on user click event
+            binding.addNoteTextView.setOnClickListener {
+                binding.addNoteTextView.visibility = View.GONE
+                binding.outlinedTextFieldNote.visibility = View.VISIBLE
+            }
+
             // Save plant info
             binding.savePlantButton.setOnClickListener {
+                val userNoteText = binding.userNoteTextInput.text.toString()
+                if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
+                    plantData.note = userNoteText
+                }
+
                 viewModel.savePlant(FirebaseAuth.getInstance().uid!!, plantData)
             }
-        })
-
-        // Save plant observer
-        viewModel.savePlantLiveData.observe(viewLifecycleOwner, {
-            it?.let {
-                Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
-                viewModel.savePlantLiveData.postValue(null)
-                return@let
-            }
-            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
         })
 
         // Error observer
@@ -85,12 +86,22 @@ class PlantInfoFragment : Fragment() {
                 binding.progressBar.animate().alpha(0f).setDuration(1000)
                 binding.errorMsgTextView.visibility = View.VISIBLE
                 Toast.makeText(
-                    requireActivity(),
-                    "Timeout Error: Sorry, please check you intent connection and try again",
-                    Toast.LENGTH_LONG
+                        requireActivity(),
+                        "Timeout Error: Sorry, please check you intent connection and try again",
+                        Toast.LENGTH_LONG
                 ).show()
-                viewModel.plantInfoErrorLiveData.postValue(null)
             }
+            viewModel.plantInfoErrorLiveData.postValue(null)
+        })
+
+        // Save plant observer
+        viewModel.savePlantLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
+                viewModel.savePlantLiveData.postValue(null)
+                return@observe //TODO Not sure about that yet
+            }
+            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
         })
     }
 }

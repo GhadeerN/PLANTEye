@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
+import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.IdentifyHistoryItemLayoutBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.view.main.SavedPlantsViewModel
 
 
-class SavedPlantsAdapter(val context: Context) :
+class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewModel) :
     RecyclerView.Adapter<SavedPlantsAdapter.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlantDataModel>() {
@@ -47,6 +50,12 @@ class SavedPlantsAdapter(val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = differ.currentList[position]
         holder.bind(item)
+
+        // On card click transform the user to plant details info
+        holder.itemView.setOnClickListener {
+            viewModel.selectedPlantInfo.postValue(item)
+            it.findNavController().navigate(R.id.action_savedPlantsFragment2_to_savedPlantDetailsFragment)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -64,7 +73,7 @@ class SavedPlantsAdapter(val context: Context) :
                     itemKingdomTextView.text = suggestion.plantDetails.taxonomy.kingdom
                     identifyDateTextView.text = item.metaData!!.date
 
-                    Glide.with(context).load(item.images!![0].url).into(binding.iitemPlantImageView)
+                    Glide.with(context).load(item.images!![0].url).into(binding.itemPlantImageView)
                     //TODO Menu option functionality for the delete, may change it to (X) :)
                 }
             }

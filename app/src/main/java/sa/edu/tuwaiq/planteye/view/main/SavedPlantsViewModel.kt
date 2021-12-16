@@ -19,6 +19,7 @@ class SavedPlantsViewModel: ViewModel() {
 
     var savedPlantsLiveData = MutableLiveData<List<PlantDataModel>>()
     var savedPlantsErrorLiveData = MutableLiveData<String>()
+    val selectedPlantInfo = MutableLiveData<PlantDataModel>()
 
     fun callSavedPlants(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,7 +33,7 @@ class SavedPlantsViewModel: ViewModel() {
                         if (error != null) {
                             savedPlantsErrorLiveData.postValue(error.message)
                             Log.d(TAG, "DOC SNAPSHOT ERROR: ${error.message}")
-//                            return
+                            return
                         }
 
                         val snap = value!!.toObject(User::class.java)!!
