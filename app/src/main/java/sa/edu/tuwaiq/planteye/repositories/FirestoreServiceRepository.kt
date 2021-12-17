@@ -39,6 +39,9 @@ class FirestoreServiceRepository {
     // Update the user note
     fun updateNote(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
 
+    // Remove the saved plant - cold be used to remove the plant OR prevent the redundancy in the user note update
+    fun removePlant(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayRemove(plant))
+
     // This companion object is to makes our Firebase Service a singleton
     companion object {
         private var instance: FirestoreServiceRepository? = null

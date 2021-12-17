@@ -12,14 +12,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentLoginBinding
+import sa.edu.tuwaiq.planteye.util.RegisterValidation
 import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.STATE
 import sa.edu.tuwaiq.planteye.view.USER_ID
 
 private const val TAG = "LoginFragment"
+
 class LoginFragment : Fragment() {
 
     lateinit var binding: FragmentLoginBinding
@@ -63,17 +66,26 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString().trim()
             val password = binding.loginPassword.text.toString()
+            val snakbarView = binding.loginSnakbarView
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (checkLoginValidity(email, password)) {
                 progressDialog.show()
                 viewModel.login(email, password)
-            } else
-                Toast.makeText(requireContext(), "Please fill in the require fields", Toast.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(
+                    snakbarView,
+                    "Please fill in the require fields",
+                    Snackbar.LENGTH_SHORT
+                ).setAnchorView(binding.textView).show()
+            }
         }
 
         // Forget password? functionality
         binding.forgetPasswordTextView.setOnClickListener {
-            ResetPasswordDialog().show(requireActivity().supportFragmentManager, "ResetPasswordDialog")
+            ResetPasswordDialog().show(
+                requireActivity().supportFragmentManager,
+                "ResetPasswordDialog"
+            )
         }
     }
 
@@ -97,8 +109,36 @@ class LoginFragment : Fragment() {
         viewModel.loginErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 progressDialog.dismiss()
-                Toast.makeText(requireActivity(), "Incorrect email or password", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(), "Incorrect email or password", Toast.LENGTH_LONG)
+                    .show()
             }
         })
+    }
+
+    // This function is to check the fields validity and show proper error messages to the user
+    private fun checkLoginValidity(email: String, password: String): Boolean {
+        val validator = RegisterValidation()
+        var state = true
+
+        val emailLayout = binding.outlinedTextFieldEmailLogin
+        val passwordLayout = binding.outlinedTextFieldPassLogin
+
+        emailLayout.error = null
+        passwordLayout.error = null
+
+        if (email.isBlank()) {
+            emailLayout.error = getString(R.string.require)
+            state = false
+        } else if (!validator.emailsIsValid(email)) {
+            emailLayout.error = getString(R.string.wrong_email_format)
+            state = false
+        }
+
+        if (password.isBlank()) {
+            passwordLayout.error = getString(R.string.require)
+            state = false
+        }
+
+        return state
     }
 }

@@ -3,6 +3,7 @@ package sa.edu.tuwaiq.planteye.view.main
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +68,14 @@ class SavedPlantsFragment : Fragment() {
                 binding.savedPlantsProgressBar.animate().alpha(0f).setDuration(1000)
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
                 viewModel.savedPlantsErrorLiveData.postValue(null)
+            }
+        })
+
+        // Delete plant
+        viewModel.removePlantLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                Log.d(TAG, "Plant removed successfully")
+                viewModel.removePlantLiveData.postValue(null)
             }
         })
     }

@@ -101,8 +101,6 @@ class MainFragment : Fragment() {
                     showImagePicker()
                 } else
                     checkCameraStoragePermission()
-            } else {
-
             }
         }
     }

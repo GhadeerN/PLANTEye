@@ -1,5 +1,6 @@
 package sa.edu.tuwaiq.planteye.view.identity
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
@@ -24,18 +26,16 @@ import kotlinx.coroutines.withContext
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentRegisterBinding
 import sa.edu.tuwaiq.planteye.model.collections.User
+import sa.edu.tuwaiq.planteye.util.RegisterValidation
 import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.STATE
 import sa.edu.tuwaiq.planteye.view.USER_ID
 import java.lang.Exception
 
 private const val TAG = "RegisterFragment"
-
 class RegisterFragment : Fragment() {
 
     lateinit var binding: FragmentRegisterBinding
-    lateinit var auth: FirebaseAuth
-    lateinit var firebaseUser: FirebaseUser
 
     private val registerViewModel: RegisterViewModel by activityViewModels()
 
@@ -45,6 +45,9 @@ class RegisterFragment : Fragment() {
     // Shared Preference
     private lateinit var sharedPref: SharedPreferences
     private lateinit var sharedPrefEditor: SharedPreferences.Editor
+
+    // Registration form validator
+    private val validator = RegisterValidation()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +71,6 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
-
         // Navigate the user to Login page (LoginFragment)
         binding.loginTextView.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
@@ -84,25 +85,23 @@ class RegisterFragment : Fragment() {
             val email = binding.registerEmail.text.toString().trim()
             val password = binding.registerPassword.text.toString()
             val confirmPassword = binding.registerConfirmPassword.text.toString()
+            val snackbarView = binding.view
             Log.d(TAG, "inside fun")
 
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+            if (checkFields(name, email, password, confirmPassword)) {
                 if (password == confirmPassword) {
                     progressDialog.show()
                     Log.d(TAG, "Inside if")
                     registerViewModel.register(User(name, email), password)
                 } else
-                    Toast.makeText(
-                        requireActivity(),
-                        "Your password does not mach confirm password!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    binding.outlinedTextFieldRePass.error =
+                        "Confirm password does not match password field"
             } else
-                Toast.makeText(
-                    requireActivity(),
+                Snackbar.make(
+                    snackbarView,
                     "Please make sure to fill all the required fields",
-                    Toast.LENGTH_LONG
-                ).show()
+                    Snackbar.LENGTH_SHORT
+                ).setAnchorView(binding.textView).show()
         }
     }
 
@@ -128,5 +127,57 @@ class RegisterFragment : Fragment() {
                 registerViewModel.registerErrorLiveData.postValue(null)
             }
         })
+    }
+
+    // This function is to check the require fields validity. Returns true if all fields are valid, and false if not
+    private fun checkFields(
+        fullName: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Boolean {
+        var state = true
+        val emailLayout = binding.outlinedTextFieldEmail
+        val fullNameLayout = binding.outlinedTextFieldName
+        val passwordLayout = binding.outlinedTextFieldPass
+        val confirmPassLayout = binding.outlinedTextFieldRePass
+
+        emailLayout.error = null
+        fullNameLayout.error = null
+        passwordLayout.error = null
+        confirmPassLayout.error = null
+
+        // Get needed string messages from strings.xml resource
+        val require = getString(R.string.require)
+        val wrongEmailFormat = getString(R.string.wrong_email_format)
+        val passwordConditions = getString(R.string.password_format)
+
+        if (fullName.isBlank()) {
+            fullNameLayout.error = require
+            state = false
+        }
+
+        if (email.isBlank()) {
+            emailLayout.error = require
+            state = false
+        } else if (!validator.emailsIsValid(email)) {
+            emailLayout.error = wrongEmailFormat
+            state = false
+        }
+
+        if (password.isBlank()) {
+            passwordLayout.error = require
+            state = false
+        } else if (!validator.passwordIsValid(password)) {
+            passwordLayout.error = passwordConditions
+            state = false
+        }
+
+        if (confirmPassword.isBlank()) {
+            confirmPassLayout.error = require
+            state = false
+        }
+
+        return state
     }
 }

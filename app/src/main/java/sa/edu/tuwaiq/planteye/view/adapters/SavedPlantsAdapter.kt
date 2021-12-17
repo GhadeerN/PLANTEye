@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.IdentifyHistoryItemLayoutBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
@@ -55,6 +56,23 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
         holder.itemView.setOnClickListener {
             viewModel.selectedPlantInfo.postValue(item)
             it.findNavController().navigate(R.id.action_savedPlantsFragment2_to_savedPlantDetailsFragment)
+        }
+
+        // Delete a note
+        holder.binding.deletePlantImageButton.setOnClickListener {
+            MaterialAlertDialogBuilder(context)
+                .setTitle("Are you sure you want to delete this plant?")
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    // Respond to negative button press
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Delete") { dialog, _ ->
+                    // Respond to positive button press
+                    viewModel.removePlant(item)
+                    dialog.dismiss()
+                }
+                .show()
+
         }
     }
 

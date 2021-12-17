@@ -17,8 +17,16 @@ private const val TAG = "SavedPlantsViewModel"
 class SavedPlantsViewModel: ViewModel() {
     private val firebaseRepo = FirestoreServiceRepository.get()
 
+    // User Id
+    var userId = ""
+
     var savedPlantsLiveData = MutableLiveData<List<PlantDataModel>>()
     var savedPlantsErrorLiveData = MutableLiveData<String>()
+
+    // Delete plant
+    var removePlantLiveData = MutableLiveData<String>()
+
+    // This live data is for the itemView that will be selected by the user - to use its data on another fragments
     val selectedPlantInfo = MutableLiveData<PlantDataModel>()
 
     fun callSavedPlants(userId: String) {
@@ -36,6 +44,7 @@ class SavedPlantsViewModel: ViewModel() {
                             return
                         }
 
+                        // Convert the document snapshot to User object to post it to live data
                         val snap = value!!.toObject(User::class.java)!!
                         savedPlantsLiveData.postValue(snap.savedPlants)
                         Log.d(TAG, "Saved plants: $savedPlantsLiveData")
@@ -63,6 +72,28 @@ class SavedPlantsViewModel: ViewModel() {
 //                })
             } catch (e: Exception) {
                 Log.d(TAG, "Catch: ${e.message}")
+                savedPlantsErrorLiveData.postValue(e.message)
+            }
+        }
+    }
+
+
+    // Delete plant
+    fun removePlant(plant: PlantDataModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = firebaseRepo.removePlant(userId, plant)
+                response.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Plant removed successfully")
+                        removePlantLiveData.postValue("success")
+                    } else {
+                        Log.d(TAG, "Remove plant - else: ${response.exception!!.message}")
+                        savedPlantsErrorLiveData.postValue(response.exception!!.message)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "Remove plant - catch: ${e.message}")
                 savedPlantsErrorLiveData.postValue(e.message)
             }
         }

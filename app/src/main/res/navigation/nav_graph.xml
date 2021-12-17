@@ -62,6 +62,6 @@
     <fragment
         android:id="@+id/savedPlantDetailsFragment"
         android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantDetailsFragment"
-        android:label="fragment_saved_plant_details"
+        android:label="@string/plant_details"
         tools:layout="@layout/fragment_saved_plant_details" />
 </navigation>

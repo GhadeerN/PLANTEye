@@ -17,6 +17,8 @@ class NoteViewModel: ViewModel() {
     var noteLiveData = MutableLiveData<String>()
     var noteErrorLiveData = MutableLiveData<String>()
 
+    var removeNoteLiveData = MutableLiveData<String>()
+
     fun updateNote(userId: String, plant: PlantDataModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -34,6 +36,27 @@ class NoteViewModel: ViewModel() {
             } catch (e: Exception) {
                 noteErrorLiveData.postValue(e.message)
                 Log.d(TAG, "update note - catch: ${e.message}")
+            }
+        }
+    }
+
+    // Remove the plant to avoid redundancy
+    fun removeNote(userId: String, plant: PlantDataModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = firebaseRepo.removePlant(userId, plant)
+                response.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Note removed successfully")
+                        removeNoteLiveData.postValue("success")
+                    } else {
+                        Log.d(TAG, "Remove note - else: ${response.exception!!.message}")
+                        noteErrorLiveData.postValue(response.exception!!.message)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "Remove note - catch: ${e.message}")
+                noteErrorLiveData.postValue(e.message)
             }
         }
     }
