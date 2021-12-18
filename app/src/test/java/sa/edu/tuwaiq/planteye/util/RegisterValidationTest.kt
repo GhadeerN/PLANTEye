@@ -28,7 +28,7 @@ class RegisterValidationTest {
         assertEquals(true, validation)
     }
 
-    // Test cases for password validation -------------------------------------------------------------
+    // Test cases for password validation ----------------------------------------------------------
     @Test
     fun passwordIsValidWithInvalidPasswordThenReturnFalseValue() {
         val validation = registrationValidator.passwordIsValid("128")

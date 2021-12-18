@@ -19,36 +19,46 @@ class NoteViewModel: ViewModel() {
 
     var removeNoteLiveData = MutableLiveData<String>()
 
-    fun updateNote(userId: String, plant: PlantDataModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = firebaseRepo.updateNote(userId, plant)
-
-                response.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        noteLiveData.postValue("Success")
-                        Log.d(TAG, "The plant updated successfully")
-                    } else {
-                        noteErrorLiveData.postValue(response.exception?.message)
-                        Log.d(TAG, "Update note - else: ${response.exception?.message}")
-                    }
-                }
-            } catch (e: Exception) {
-                noteErrorLiveData.postValue(e.message)
-                Log.d(TAG, "update note - catch: ${e.message}")
-            }
-        }
-    }
+//    fun updateNote(userId: String, plant: PlantDataModel) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                val response = firebaseRepo.updateNote(userId, plant)
+//
+//                response.addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        noteLiveData.postValue("Success")
+//                        Log.d(TAG, "The plant updated successfully")
+//                    } else {
+//                        noteErrorLiveData.postValue(response.exception?.message)
+//                        Log.d(TAG, "Update note - else: ${response.exception?.message}")
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                noteErrorLiveData.postValue(e.message)
+//                Log.d(TAG, "update note - catch: ${e.message}")
+//            }
+//        }
+//    }
 
     // Remove the plant to avoid redundancy
-    fun removeNote(userId: String, plant: PlantDataModel) {
+    fun updateNote(userId: String, oldPlant: PlantDataModel, newPlant: PlantDataModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = firebaseRepo.removePlant(userId, plant)
-                response.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
+                val response = firebaseRepo.removePlant(userId, oldPlant)
+                response.addOnCompleteListener { removeTask ->
+                    if (removeTask.isSuccessful) {
                         Log.d(TAG, "Note removed successfully")
                         removeNoteLiveData.postValue("success")
+//                        val update = firebaseRepo.savePlant(userId, newPlant)
+//                        update.addOnCompleteListener {  addNote ->
+//                            if (addNote.isSuccessful) {
+//                                noteLiveData.postValue("success")
+//                                Log.d(TAG, "Note added successfully")
+//                            } else {
+//                                Log.d(TAG, "Note not added successfully - else")
+//                                noteErrorLiveData.postValue(addNote.exception?.message)
+//                            }
+//                        }
                     } else {
                         Log.d(TAG, "Remove note - else: ${response.exception!!.message}")
                         noteErrorLiveData.postValue(response.exception!!.message)

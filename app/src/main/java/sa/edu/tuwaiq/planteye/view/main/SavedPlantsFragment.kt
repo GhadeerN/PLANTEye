@@ -29,7 +29,6 @@ class SavedPlantsFragment : Fragment() {
 
     // Shared Preference
     private lateinit var sharedPref: SharedPreferences
-    private lateinit var sharedPrefEditor: SharedPreferences.Editor
 
     private lateinit var plantsAdapter: SavedPlantsAdapter
 
@@ -39,7 +38,6 @@ class SavedPlantsFragment : Fragment() {
     ): View? {
         // Shared pref initialization
         sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        sharedPrefEditor = sharedPref.edit()
 
         // Inflate the layout for this fragment
         binding = FragmentSavedPlantsBinding.inflate(inflater, container, false)

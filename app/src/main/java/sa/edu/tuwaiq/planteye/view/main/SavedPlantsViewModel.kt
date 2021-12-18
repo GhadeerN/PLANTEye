@@ -28,6 +28,8 @@ class SavedPlantsViewModel: ViewModel() {
 
     // This live data is for the itemView that will be selected by the user - to use its data on another fragments
     val selectedPlantInfo = MutableLiveData<PlantDataModel>()
+    var selectedPlantIndex: Int? = null // Here the index in the plant array works like the id, and we'll use it later
+    // For the update
 
     fun callSavedPlants(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -79,7 +81,7 @@ class SavedPlantsViewModel: ViewModel() {
 
 
     // Delete plant
-    fun removePlant(plant: PlantDataModel) {
+    fun removePlant(userId: String, plant: PlantDataModel) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = firebaseRepo.removePlant(userId, plant)

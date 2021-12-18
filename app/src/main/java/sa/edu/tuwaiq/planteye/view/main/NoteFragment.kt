@@ -55,23 +55,27 @@ class NoteFragment : Fragment() {
 
         observer()
 
+        binding.saveNoteEditButton.visibility = View.GONE
+
         val inputTextLayout: TextInputLayout = binding.outlinedTextFieldSavedNote
         inputTextLayout.editText?.doOnTextChanged { text, start, before, count ->
-            if (count > 0) {
+//            if (count > 0) {
                 Log.d(TAG, "Inside doOnTextChanged - counter: $count")
                 Log.d(TAG, "Inside doOnTextChanged - text: $text")
                 binding.saveNoteEditButton.visibility = View.VISIBLE
-            } else {
-                Log.d(TAG, "else part - counter $count")
-                binding.saveNoteEditButton.visibility = View.GONE
-            }
+//            } else {
+//                Log.d(TAG, "else part - counter $count")
+//                binding.saveNoteEditButton.visibility = View.GONE
+//            }
         }
-
-        binding.saveNoteEditButton.visibility = View.GONE
 
         // Save note, or save the edited note
         binding.saveNoteEditButton.setOnClickListener {
-            noteViewModel.removeNote(userId, plantInfo)
+            val newPlant = plantInfo
+            newPlant.note = binding.savedDetailsUserNoteTextInput.text.toString().trim()
+            Log.d(TAG, "oldPlant: ${plantInfo.note}, newPlant: ${newPlant.note}")
+
+            noteViewModel.updateNote(userId, plantInfo, newPlant)
         }
 
         // Listen to the change on the edit text - if it's not blank,
@@ -114,7 +118,7 @@ class NoteFragment : Fragment() {
     private fun observer() {
         // Selected Plant Info
         savedPlantViewModel.selectedPlantInfo.observe(viewLifecycleOwner, { plant ->
-            Log.d(TAG, "Selected Plant: $plant")
+            Log.d(TAG, "Selected Plant: $plant\n Selected Plant not: ${plant.note}")
             plantInfo = plant
             if (plant.note.isNotBlank()) {
                 binding.savedDetailsUserNoteTextInput.setText(
@@ -126,12 +130,13 @@ class NoteFragment : Fragment() {
         // Success - note added
         noteViewModel.noteLiveData.observe(viewLifecycleOwner, {
             it?.let {
+                Log.d(TAG, "inside noteLiveData: $it")
+                noteViewModel.noteLiveData.postValue(null)
                 Toast.makeText(
                     requireActivity(),
                     "Your note is added successfully",
                     Toast.LENGTH_SHORT
                 ).show()
-                noteViewModel.noteLiveData.postValue(null)
             }
         })
 
@@ -139,11 +144,11 @@ class NoteFragment : Fragment() {
         noteViewModel.removeNoteLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 Log.d(TAG, "Remove note live data - User id: $userId")
-                if (it == "success") {
-                    Log.d(TAG, "Add note HERE!!!")
-                    plantInfo.note = binding.savedDetailsUserNoteTextInput.text.toString().trim()
-                    noteViewModel.updateNote(userId, plantInfo)
-                }
+//                if (it == "success") {
+//                    Log.d(TAG, "Add note HERE!!!")
+//
+//                    noteViewModel.updateNote(userId, plantInfo)
+//                }
                 noteViewModel.removeNoteLiveData.postValue(null)
             }
         })

@@ -1,6 +1,7 @@
 package sa.edu.tuwaiq.planteye.view.adapters
 
 import android.content.Context
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,11 +13,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.IdentifyHistoryItemLayoutBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.view.FILE_NAME
+import sa.edu.tuwaiq.planteye.view.USER_ID
 import sa.edu.tuwaiq.planteye.view.main.SavedPlantsViewModel
 
-
+private const val TAG = "SavedPlantsAdapter"
 class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewModel) :
     RecyclerView.Adapter<SavedPlantsAdapter.ViewHolder>() {
+
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlantDataModel>() {
         override fun areItemsTheSame(oldItem: PlantDataModel, newItem: PlantDataModel): Boolean {
@@ -50,15 +54,20 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = differ.currentList[position]
+        Log.d(TAG, "Position $position, note: ${item.note} val: $item")
         holder.bind(item)
 
         // On card click transform the user to plant details info
         holder.itemView.setOnClickListener {
+            Log.d(TAG, "Selected - Position $position, note: ${item.note} val: $item")
             viewModel.selectedPlantInfo.postValue(item)
+            viewModel.selectedPlantIndex = position
+
             it.findNavController().navigate(R.id.action_savedPlantsFragment2_to_savedPlantDetailsFragment)
         }
+        val sharedPref = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
-        // Delete a note
+        // Delete a plant
         holder.binding.deletePlantImageButton.setOnClickListener {
             MaterialAlertDialogBuilder(context)
                 .setTitle("Are you sure you want to delete this plant?")
@@ -68,7 +77,7 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
                 }
                 .setPositiveButton("Delete") { dialog, _ ->
                     // Respond to positive button press
-                    viewModel.removePlant(item)
+                    viewModel.removePlant(sharedPref.getString(USER_ID, "")!!, item)
                     dialog.dismiss()
                 }
                 .show()
