@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_mainFragment2_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_loginToContinueDialog"
+            app:destination="@id/loginToContinueDialog" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -64,4 +67,15 @@
         android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantDetailsFragment"
         android:label="@string/plant_details"
         tools:layout="@layout/fragment_saved_plant_details" />
+    <dialog
+        android:id="@+id/loginToContinueDialog"
+        android:name="sa.edu.tuwaiq.planteye.view.main.LoginToContinueDialog"
+        android:label="LoginToContinueDialog" >
+        <action
+            android:id="@+id/action_loginToContinueDialog_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginToContinueDialog_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </dialog>
 </navigation>

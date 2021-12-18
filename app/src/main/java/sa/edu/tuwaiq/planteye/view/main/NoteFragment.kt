@@ -75,7 +75,7 @@ class NoteFragment : Fragment() {
             newPlant.note = binding.savedDetailsUserNoteTextInput.text.toString().trim()
             Log.d(TAG, "oldPlant: ${plantInfo.note}, newPlant: ${newPlant.note}")
 
-            noteViewModel.updateNote(userId, plantInfo, newPlant)
+            noteViewModel.update(userId, plantInfo, newPlant)
         }
 
         // Listen to the change on the edit text - if it's not blank,
@@ -138,17 +138,13 @@ class NoteFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            noteViewModel.noteLiveData.postValue(null)
         })
 
         // Remove plant first, then add it again to avoid redundancy
         noteViewModel.removeNoteLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 Log.d(TAG, "Remove note live data - User id: $userId")
-//                if (it == "success") {
-//                    Log.d(TAG, "Add note HERE!!!")
-//
-//                    noteViewModel.updateNote(userId, plantInfo)
-//                }
                 noteViewModel.removeNoteLiveData.postValue(null)
             }
         })

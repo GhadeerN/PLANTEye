@@ -34,4 +34,9 @@ data class PlantDataModel(
 
     // User note
     var note: String = ""
-)
+) {
+    // I override this function (Why?) - so the note update operation work properly
+    override fun equals(obj: Any?): Boolean {
+        return this.id == (obj as PlantDataModel).id
+    }
+}

@@ -26,6 +26,8 @@ import com.zhihu.matisse.internal.entity.CaptureStrategy
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentMainBinding
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
+import sa.edu.tuwaiq.planteye.view.identity.ResetPasswordDialog
+import sa.edu.tuwaiq.planteye.view.main.LoginToContinueDialog
 import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
 import java.io.File
 
@@ -101,6 +103,12 @@ class MainFragment : Fragment() {
                     showImagePicker()
                 } else
                     checkCameraStoragePermission()
+            } else {
+                findNavController().navigate(R.id.action_mainFragment2_to_loginToContinueDialog)
+//                LoginToContinueDialog().show(
+//                    requireActivity().supportFragmentManager,
+//                    "LoginToContinueDialog"
+//                )
             }
         }
     }

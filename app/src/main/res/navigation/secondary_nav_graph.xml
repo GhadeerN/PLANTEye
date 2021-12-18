@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/secondary_nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/plantInfoFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="sa.edu.tuwaiq.planteye.view.identity.LoginFragment"
@@ -22,4 +22,9 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/plantInfoFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.PlantInfoFragment"
+        android:label="fragment_plant_info"
+        tools:layout="@layout/fragment_plant_info" />
 </navigation>

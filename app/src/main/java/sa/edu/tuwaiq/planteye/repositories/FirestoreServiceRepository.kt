@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
@@ -39,12 +40,14 @@ class FirestoreServiceRepository {
     // Get user saved Plants info
     fun savedPlants(userId: String) = userCollection.document(userId)
 
-    // Update the user note
+    // Update the user note - DON'T WORK!!
     fun updateNote(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
 
-    // TODO UPDATE NOTE - TEST
-//    fun updateNote2(userId: String, plant: PlantDataModel) = userCollection.document(userId).get().result
-//    val i = userCollection.document(userId).set()
+
+    // Update the user note via removing it and adding the new one in one go using set()
+    fun setPlant(userId: String, plant: List<PlantDataModel>) = userCollection.document(userId).set(
+        mutableMapOf("savedPlants" to plant), SetOptions.merge())
+
 
     // This companion object is to makes our Firebase Service a singleton
     companion object {
