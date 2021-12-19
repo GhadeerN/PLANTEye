@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_articalesFragment_to_savedPlantsFragment"
             app:destination="@id/savedPlantsFragment" />
+        <action
+            android:id="@+id/action_articalesFragment_to_articleContentFragment"
+            app:destination="@id/articleContentFragment" />
     </fragment>
     <fragment
         android:id="@+id/diagnosesFragment"
@@ -37,4 +40,9 @@
         android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantsFragment"
         android:label="fragment_saved_plants"
         tools:layout="@layout/fragment_saved_plants" />
+    <fragment
+        android:id="@+id/articleContentFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.ArticleContentFragment"
+        android:label="fragment_article_content"
+        tools:layout="@layout/fragment_article_content" />
 </navigation>

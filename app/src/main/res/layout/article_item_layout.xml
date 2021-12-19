@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
@@ -18,7 +17,7 @@
         <ImageView
             android:id="@+id/artical_img_imageView"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="230dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -30,6 +29,8 @@
             android:lines="2"
             android:maxLines="2"
             android:text="Plant health: Keeping plants healthy while protecting the environment"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

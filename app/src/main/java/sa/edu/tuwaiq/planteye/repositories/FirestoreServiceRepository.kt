@@ -17,6 +17,7 @@ class FirestoreServiceRepository {
 
     // Collections
     private val userCollection = database.collection("users")
+    private val articleCollection = database.collection("Articles")
 
     // Login
     fun login(email: String, password: String)= firebaseAuth.signInWithEmailAndPassword(email,password)
@@ -48,6 +49,8 @@ class FirestoreServiceRepository {
     fun setPlant(userId: String, plant: List<PlantDataModel>) = userCollection.document(userId).set(
         mutableMapOf("savedPlants" to plant), SetOptions.merge())
 
+    // Articles ------------------------------------------------------------------------------------
+    fun getArticles() = articleCollection
 
     // This companion object is to makes our Firebase Service a singleton
     companion object {

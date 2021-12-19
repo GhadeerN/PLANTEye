@@ -17,9 +17,6 @@ private const val TAG = "SavedPlantsViewModel"
 class SavedPlantsViewModel: ViewModel() {
     private val firebaseRepo = FirestoreServiceRepository.get()
 
-    // User Id
-    var userId = ""
-
     var savedPlantsLiveData = MutableLiveData<List<PlantDataModel>>()
     var savedPlantsErrorLiveData = MutableLiveData<String>()
 
