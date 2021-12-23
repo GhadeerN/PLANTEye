@@ -1,6 +1,5 @@
 package sa.edu.tuwaiq.planteye.view.main
 
-import android.os.Binder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentSavedPlantDetailsBinding
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.view.adapters.DetailFragmentAdapter
 
 /*  This fragment will contains the view pager & layout tabs - so I will initialize the adapter here
@@ -60,8 +57,8 @@ class SavedPlantDetailsFragment : Fragment() {
     private fun observer() {
         viewModel.selectedPlantInfo.observe(viewLifecycleOwner, { plant ->
             // Set the plant name and image
-            binding.plantTitle.text = plant.suggestions!![0].plantName
-            Glide.with(this).load(plant.images!![0].url).into(binding.plantImage)
+            binding.plantTitle.text = plant.plant!!.suggestions!![0].plantName
+            Glide.with(this).load(plant.plant.images!![0].url).into(binding.plantImage)
         })
     }
 }

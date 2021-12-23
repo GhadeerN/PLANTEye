@@ -4,13 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
-import sa.edu.tuwaiq.planteye.model.collections.User
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
 import java.lang.Exception
 
@@ -24,53 +20,72 @@ class NoteViewModel : ViewModel() {
 
     var removeNoteLiveData = MutableLiveData<String>()
 
-    /* Since the Firestore doesn't support updating array element directly (cause we need the element index and it cannot specify it)
-       , we could do the update either by removing (.arrayRemove) and adding (.arrayUnion) the element again in the list -> this is costly operations
-       The nice way I found is to update the array element and add it again in one go using .set() :) */
-    fun update(userId: String, oldPlant: PlantDataModel, newPlant: PlantDataModel) {
+    fun updateNote(userId: String, plant: SavedPlants) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = firebaseRepo.savedPlants(userId)
-                response.addSnapshotListener(object : EventListener<DocumentSnapshot> {
-                    override fun onEvent(
-                        value: DocumentSnapshot?,
-                        error: FirebaseFirestoreException?
-                    ) {
-                        if (error != null) {
-                            noteErrorLiveData.postValue(error.message)
-                            Log.d(TAG, "DOC SNAPSHOT ERROR: ${error.message}")
-                            return
-                        }
-
-                        // First we need to get the entire savedPlant array from DB
-                        val snapOfPlants = value!!.toObject(User::class.java)?.savedPlants
-
-                        snapOfPlants?.let {
-                            // Then in case it was not null - remove the old object from it and add the new one (that contains the user changes)
-                            snapOfPlants.remove(oldPlant)
-                            snapOfPlants.add(newPlant)
-
-                            // Set the saved plant array to the new changes
-                            firebaseRepo.setPlant(userId, snapOfPlants)
-                                .addOnCompleteListener { setTask ->
-                                    Log.d(TAG, "in setPlant")
-                                    if (setTask.isSuccessful) {
-                                        Log.d(TAG, "update done successfully")
-                                        noteLiveData.postValue("success")
-                                    } else {
-                                        Log.d(TAG, "update failed: ${setTask.exception?.message}")
-                                        noteErrorLiveData.postValue(setTask.exception?.message)
-                                    }
-                                }
-                        }
+                val response = firebaseRepo.updateNote(userId, plant)
+                response.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "update done successfully")
+                        noteLiveData.postValue(plant.note)
+                    } else {
+                        Log.d(TAG, "update note - else: ${response.exception?.message}")
+                        noteErrorLiveData.postValue(response.exception?.message)
                     }
-                })
+                }
             } catch (e: Exception) {
-                noteErrorLiveData.postValue(e.message)
                 Log.d(TAG, "update note - catch: ${e.message}")
+                noteErrorLiveData.postValue(e.message)
             }
         }
     }
+    /* Since the Firestore doesn't support updating array element directly (cause we need the element index and it cannot specify it)
+       , we could do the update either by removing (.arrayRemove) and adding (.arrayUnion) the element again in the list -> this is costly operations
+       The nice way I found is to update the array element and add it again in one go using .set() :) */
+//    fun update(userId: String, oldPlant: PlantDataModel, newPlant: PlantDataModel) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                val response = firebaseRepo.savedPlants(userId)
+//                response.addSnapshotListener(object : EventListener<DocumentSnapshot> {
+//                    override fun onEvent(
+//                        value: DocumentSnapshot?,
+//                        error: FirebaseFirestoreException?
+//                    ) {
+//                        if (error != null) {
+//                            noteErrorLiveData.postValue(error.message)
+//                            Log.d(TAG, "DOC SNAPSHOT ERROR: ${error.message}")
+//                            return
+//                        }
+//
+//                        // First we need to get the entire savedPlant array from DB
+//                        val snapOfPlants = value!!.toObject(User::class.java)?.savedPlants
+//
+//                        snapOfPlants?.let {
+//                            // Then in case it was not null - remove the old object from it and add the new one (that contains the user changes)
+//                            snapOfPlants.remove(oldPlant)
+//                            snapOfPlants.add(newPlant)
+//
+//                            // Set the saved plant array to the new changes
+//                            firebaseRepo.setPlant(userId, snapOfPlants)
+//                                .addOnCompleteListener { setTask ->
+//                                    Log.d(TAG, "in setPlant")
+//                                    if (setTask.isSuccessful) {
+//                                        Log.d(TAG, "update done successfully")
+//                                        noteLiveData.postValue("success")
+//                                    } else {
+//                                        Log.d(TAG, "update failed: ${setTask.exception?.message}")
+//                                        noteErrorLiveData.postValue(setTask.exception?.message)
+//                                    }
+//                                }
+//                        }
+//                    }
+//                })
+//            } catch (e: Exception) {
+//                noteErrorLiveData.postValue(e.message)
+//                Log.d(TAG, "update note - catch: ${e.message}")
+//            }
+//        }
+//    }
 
 //    fun updateNote(userId: String, plant: PlantDataModel) {
 //        viewModelScope.launch(Dispatchers.IO) {

@@ -11,15 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.databinding.DetailsButtomSheetModalBinding
-import sa.edu.tuwaiq.planteye.databinding.FragmentMainBinding
-import sa.edu.tuwaiq.planteye.view.adapters.DetailFragmentAdapter
+import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
 
 private const val TAG = "DetailsBottomSheetModal"
@@ -108,12 +105,15 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
 
             // Save plant info
             binding.savePlantButton.setOnClickListener {
+                // Saved plants object. Why? to add the user note with the plant data and then pass it to the DB repo to save it for this user
+                val savedPlant = SavedPlants(plantData)
+
                 val userNoteText = binding.userNoteTextInput.text.toString()
                 if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
-                    plantData.note = userNoteText
+                    savedPlant.note = userNoteText
                 }
 
-                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, plantData)
+                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
             }
         })
 
@@ -136,9 +136,9 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
             it?.let {
                 Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
                 viewModel.savePlantLiveData.postValue(null)
-                return@observe //TODO Not sure about that yet
+//                return
             }
-            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
         })
     }
 }

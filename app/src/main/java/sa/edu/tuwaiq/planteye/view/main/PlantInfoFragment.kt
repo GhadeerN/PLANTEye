@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.auth.FirebaseAuth
-import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentPlantInfoBinding
+import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 
 private const val TAG = "PlantInfoFragment"
 
@@ -71,12 +72,14 @@ class PlantInfoFragment : Fragment() {
 
             // Save plant info
             binding.savePlantButton.setOnClickListener {
+                //
+                val savedPlant = SavedPlants(plantData)
                 val userNoteText = binding.userNoteTextInput.text.toString()
                 if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
-                    plantData.note = userNoteText
+                    savedPlant.note = userNoteText
                 }
 
-                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, plantData)
+                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
             }
         })
 
@@ -87,7 +90,7 @@ class PlantInfoFragment : Fragment() {
                 binding.errorMsgTextView.visibility = View.VISIBLE
                 Toast.makeText(
                         requireActivity(),
-                        "Timeout Error: Sorry, please check you intent connection and try again",
+                        it,
                         Toast.LENGTH_LONG
                 ).show()
             }
@@ -97,11 +100,10 @@ class PlantInfoFragment : Fragment() {
         // Save plant observer
         viewModel.savePlantLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "The plant is saved successfully! ❤", Toast.LENGTH_SHORT).show()
                 viewModel.savePlantLiveData.postValue(null)
-                return@observe //TODO Not sure about that yet
             }
-            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
         })
     }
 }

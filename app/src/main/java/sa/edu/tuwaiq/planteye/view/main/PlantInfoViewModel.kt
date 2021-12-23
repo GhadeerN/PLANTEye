@@ -5,17 +5,20 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
-import sa.edu.tuwaiq.planteye.model.Suggestion
 import sa.edu.tuwaiq.planteye.model.body.IdentifyPlantBody
+import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.repositories.ApiServiceRepository
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
 import java.lang.Exception
+import java.util.*
 
 private const val TAG = "PlantInfoViewModel"
-class PlantInfoViewModel: ViewModel() {
+
+class PlantInfoViewModel : ViewModel() {
     private val apiRepo = ApiServiceRepository.get()
     private val firebaseRepo = FirestoreServiceRepository.get()
 
@@ -51,19 +54,19 @@ class PlantInfoViewModel: ViewModel() {
         }
     }
 
-
-    // Save plant to the user data
-    fun savePlant(userId: String, plant: PlantDataModel) {
+    // TODO New save plant fun
+    fun savePlant(userId: String, plantToSave: SavedPlants) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = firebaseRepo.savePlant(userId, plant)
+                val response = firebaseRepo.savePlant(userId, plantToSave)
+
                 response.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "Plant data saved successfully!")
-                        savePlantLiveData.postValue("Success")
+                        Log.d(TAG, "Plant saved successfully - plant $plantToSave")
+                        savePlantLiveData.postValue("Plant saved successfully")
                     } else {
-                        Log.d(TAG, "Plant data NOT saved - ELSE")
-                        plantInfoErrorLiveData.postValue("error")
+                        Log.d(TAG, "Plant was not saved! - else")
+                        plantInfoErrorLiveData.postValue(response.exception?.message)
                     }
                 }
             } catch (e: Exception) {
@@ -72,4 +75,25 @@ class PlantInfoViewModel: ViewModel() {
             }
         }
     }
+
+    // Save plant to the user data
+//    fun savePlant(userId: String, plant: PlantDataModel) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                val response = firebaseRepo.savePlant(userId, plant)
+//                response.addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        Log.d(TAG, "Plant data saved successfully!")
+//                        savePlantLiveData.postValue("Success")
+//                    } else {
+//                        Log.d(TAG, "Plant data NOT saved - ELSE")
+//                        plantInfoErrorLiveData.postValue("error")
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                Log.d(TAG, "Catch: Plant data NOT saved -> ${e.message}")
+//                plantInfoErrorLiveData.postValue(e.message)
+//            }
+//        }
+//    }
 }

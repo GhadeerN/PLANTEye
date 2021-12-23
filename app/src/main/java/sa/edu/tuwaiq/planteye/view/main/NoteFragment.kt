@@ -3,23 +3,17 @@ package sa.edu.tuwaiq.planteye.view.main
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentNoteBinding
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.USER_ID
 
@@ -37,7 +31,7 @@ class NoteFragment : Fragment() {
     // Shared preference to get the user id for the note update
     private lateinit var sharedPref: SharedPreferences
 
-    lateinit var plantInfo: PlantDataModel
+    lateinit var plantInfo: SavedPlants
     lateinit var userId: String
 
     override fun onCreateView(
@@ -71,11 +65,10 @@ class NoteFragment : Fragment() {
 
         // Save note, or save the edited note
         binding.saveNoteEditButton.setOnClickListener {
-            val newPlant = plantInfo
-            newPlant.note = binding.savedDetailsUserNoteTextInput.text.toString().trim()
-            Log.d(TAG, "oldPlant: ${plantInfo.note}, newPlant: ${newPlant.note}")
+            plantInfo.note = binding.savedDetailsUserNoteTextInput.text.toString().trim()
+            Log.d(TAG, "newPlant: ${plantInfo.note}")
 
-            noteViewModel.update(userId, plantInfo, newPlant)
+            noteViewModel.updateNote(userId, plantInfo)
         }
 
         // Listen to the change on the edit text - if it's not blank,
@@ -117,12 +110,12 @@ class NoteFragment : Fragment() {
 
     private fun observer() {
         // Selected Plant Info
-        savedPlantViewModel.selectedPlantInfo.observe(viewLifecycleOwner, { plant ->
-            Log.d(TAG, "Selected Plant: $plant\n Selected Plant not: ${plant.note}")
+        savedPlantViewModel.selectedPlantInfo.observe(requireActivity(), { plant ->
+            Log.d(TAG, "Selected Plant: $plant\n Selected Plant not: ${plant.plant!!.suggestions!![0].plantName}")
             plantInfo = plant
-            if (plant.note.isNotBlank()) {
+            if (plantInfo.note.isNotBlank()) {
                 binding.savedDetailsUserNoteTextInput.setText(
-                    plant.note
+                    plantInfo.note
                 )
             }
         })

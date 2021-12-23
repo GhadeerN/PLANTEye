@@ -1,7 +1,6 @@
 package sa.edu.tuwaiq.planteye.model.collections
 
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
-import sa.edu.tuwaiq.planteye.model.Suggestion
 
 data class User(
     val fullName: String = "",

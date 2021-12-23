@@ -12,29 +12,30 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.IdentifyHistoryItemLayoutBinding
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.USER_ID
 import sa.edu.tuwaiq.planteye.view.main.SavedPlantsViewModel
 
 private const val TAG = "SavedPlantsAdapter"
+
 class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewModel) :
     RecyclerView.Adapter<SavedPlantsAdapter.ViewHolder>() {
 
 
-    val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PlantDataModel>() {
-        override fun areItemsTheSame(oldItem: PlantDataModel, newItem: PlantDataModel): Boolean {
-            return oldItem.id == newItem.id
+    val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SavedPlants>() {
+        override fun areItemsTheSame(oldItem: SavedPlants, newItem: SavedPlants): Boolean {
+            return oldItem.plant!!.id == newItem.plant!!.id
         }
 
-        override fun areContentsTheSame(oldItem: PlantDataModel, newItem: PlantDataModel): Boolean {
+        override fun areContentsTheSame(oldItem: SavedPlants, newItem: SavedPlants): Boolean {
             return oldItem == newItem
         }
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
 
-    fun submitList(list: List<PlantDataModel>) {
+    fun submitList(list: List<SavedPlants>) {
         differ.submitList(list)
     }
 
@@ -54,16 +55,16 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = differ.currentList[position]
-        Log.d(TAG, "Position $position, note: ${item.note} val: $item")
+        Log.d(TAG, "Position $position, val: $item")
         holder.bind(item)
 
         // On card click transform the user to plant details info
         holder.itemView.setOnClickListener {
-            Log.d(TAG, "Selected - Position $position, note: ${item.note} val: $item")
+            Log.d(TAG, "Selected - Position $position, val: $item")
             viewModel.selectedPlantInfo.postValue(item)
-            viewModel.selectedPlantIndex = position
 
-            it.findNavController().navigate(R.id.action_savedPlantsFragment2_to_savedPlantDetailsFragment)
+            it.findNavController()
+                .navigate(R.id.action_savedPlantsFragment2_to_savedPlantDetailsFragment)
         }
         val sharedPref = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
@@ -77,7 +78,7 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
                 }
                 .setPositiveButton("Delete") { dialog, _ ->
                     // Respond to positive button press
-                    viewModel.removePlant(sharedPref.getString(USER_ID, "")!!, item)
+                    viewModel.removePlant(sharedPref.getString(USER_ID, "")!!, item.plant!!)
                     dialog.dismiss()
                 }
                 .show()
@@ -91,18 +92,17 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
 
     inner class ViewHolder(val binding: IdentifyHistoryItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            fun bind(item: PlantDataModel) {
-                binding.apply {
-                    val suggestion = item.suggestions!![0]
-                    this.itemPlantNameTextView.text = suggestion.plantName
-                    itemDescriptionTextView.text = suggestion.plantDetails!!.wikiDescription!!.value
-                    itemFamilyTextView.text = suggestion.plantDetails.taxonomy!!.family
-                    itemKingdomTextView.text = suggestion.plantDetails.taxonomy.kingdom
-                    identifyDateTextView.text = item.metaData!!.date
+        fun bind(item: SavedPlants) {
+            binding.apply {
+                val suggestion = item.plant!!.suggestions!![0]
+                this.itemPlantNameTextView.text = suggestion.plantName
+                itemDescriptionTextView.text = suggestion.plantDetails!!.wikiDescription!!.value
+                itemFamilyTextView.text = suggestion.plantDetails.taxonomy!!.family
+                itemKingdomTextView.text = suggestion.plantDetails.taxonomy.kingdom
+                identifyDateTextView.text = item.plant.metaData!!.date
 
-                    Glide.with(context).load(item.images!![0].url).into(binding.itemPlantImageView)
-                    //TODO Menu option functionality for the delete, may change it to (X) :)
-                }
+                Glide.with(context).load(item.plant.images!![0].url).into(binding.itemPlantImageView)
             }
+        }
     }
 }

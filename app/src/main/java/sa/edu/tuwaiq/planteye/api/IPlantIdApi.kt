@@ -2,7 +2,6 @@ package sa.edu.tuwaiq.planteye.api
 
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import sa.edu.tuwaiq.planteye.model.DiagnosesDataModel

@@ -37,7 +37,7 @@ class PlantDetailsPageFragment : Fragment() {
 
     private fun observer() {
         viewModel.selectedPlantInfo.observe(viewLifecycleOwner, { plant ->
-            val suggestion = plant.suggestions!![0]
+            val suggestion = plant.plant!!.suggestions!![0]
 
             binding.savedDetailsFamily.text = suggestion.plantDetails!!.taxonomy!!.family
             binding.savedDetailsKingdom.text = suggestion.plantDetails.taxonomy!!.kingdom
