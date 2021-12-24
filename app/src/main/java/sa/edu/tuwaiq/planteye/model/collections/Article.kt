@@ -5,5 +5,6 @@ data class Article(
     val content: String = "",
     val image: String = "",
     val date: String = "",
-    val id: Int? = null
+    val id: Int? = null,
+    val url: String = ""
 )

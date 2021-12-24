@@ -10,10 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
+import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.DetailsButtomSheetModalBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
@@ -25,6 +28,11 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
     lateinit var binding: DetailsButtomSheetModalBinding
     private val viewModel: PlantInfoViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Round shape style (For the card)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.ThemeOverlay_Demo_BottomSheetDialog)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,11 +46,14 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.infoLinearLayout.visibility = View.GONE
+        binding.progressBar.isVisible = true
+
         observers()
 
         binding.plantImageView.setImageBitmap(viewModel.imageBitmap)
 
-        viewModel.callPlantInfo(viewModel.image)
+//        viewModel.callPlantInfo(viewModel.image)
 
         // This code is to show expand the bottom sheet on it max height, and add expanded behavior to it
         val bottomSheet = binding.frameLayout
