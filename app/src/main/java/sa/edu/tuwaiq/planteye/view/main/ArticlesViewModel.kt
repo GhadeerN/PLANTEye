@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.firebase.firestore.*
@@ -12,7 +11,7 @@ import com.google.firebase.firestore.EventListener
 import sa.edu.tuwaiq.planteye.model.collections.Article
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
 import java.lang.Exception
-import java.util.*
+
 
 private const val TAG = "ArticlesViewModel"
 class ArticlesViewModel: ViewModel() {

@@ -55,4 +55,5 @@
         least one uppercase and lowercase letter\n- At least one symbol\n- At least one number digit</string>
     <string name="login_to_continue">To Continue, Login to PlantEye</string>
     <string name="discover_beautiful_plants">Discover beautiful plants and read more about gardining</string>
+    <string name="common_names">Common Names</string>
 </resources>

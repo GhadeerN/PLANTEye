@@ -101,7 +101,9 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
                 itemKingdomTextView.text = suggestion.plantDetails.taxonomy.kingdom
                 identifyDateTextView.text = item.plant.metaData!!.date
 
-                Glide.with(context).load(item.plant.images!![0].url).into(binding.itemPlantImageView)
+                Glide.with(context).load(item.plant.images!![0].url)
+                    .placeholder(R.drawable.ic_plant_placeholder)
+                    .into(binding.itemPlantImageView)
             }
         }
     }

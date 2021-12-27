@@ -3,12 +3,14 @@ package sa.edu.tuwaiq.planteye.repositories
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import sa.edu.tuwaiq.planteye.model.DiagnosesDataModel
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.model.collections.User
 
 class FirestoreServiceRepository {
     private val database = FirebaseFirestore.getInstance()
     private val SAVED_PLANTS = "SavedPlants"
+    private val DIAGNOSE_RESULTS = "DiagnoseResults"
     val firebaseAuth = FirebaseAuth.getInstance()
 
     // Collections
@@ -16,6 +18,7 @@ class FirestoreServiceRepository {
     private val articleCollection = database.collection("Articles")
     private val savedPlantsCollection = database.collection("SavedPlants")
 
+    // Identity -------------------------------------------------------------------------------------
     // Login
     fun login(email: String, password: String) =
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -30,6 +33,8 @@ class FirestoreServiceRepository {
     fun saveUser(userId: String, user: User) = userCollection.document(userId).set(user)
 
     // Get user info
+
+    // Plant identification ------------------------------------------------------------------------
 
     // Save this plant - in savedPlant collection, where collection(SavedPlant) -> doc(PlantId) -> (savedPlant, userId) - savedPlantsCollection.document(plant.plant?.id.toString()).set(plant)
     fun savePlant(userId: String, plant: SavedPlants) =
@@ -60,11 +65,17 @@ class FirestoreServiceRepository {
             plant.plant?.id.toString()
         ).update("note", plant.note)
 
-
     // Update the user note via removing it and adding the new one in one go using set()
 //    fun setPlant(userId: String, plant: List<PlantDataModel>) = userCollection.document(userId).set(
 //        mutableMapOf("savedPlants" to plant), SetOptions.merge()
 //    )
+
+    // Disease diagnoses ---------------------------------------------------------------------------
+    // Save plant diagnose result
+    fun saveDiagnoseResult(userId: String, plant: DiagnosesDataModel) =
+        userCollection.document(userId).collection(DIAGNOSE_RESULTS).document(
+            plant.id.toString()
+        ).set(plant)
 
     // Articles ------------------------------------------------------------------------------------
     fun getArticles() = articleCollection

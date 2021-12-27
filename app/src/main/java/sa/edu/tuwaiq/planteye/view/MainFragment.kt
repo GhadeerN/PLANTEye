@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
     private val REQUEST_CODE_CP = 1
 
     // Create instance of the viewModel
-    private val viewModel: PlantInfoViewModel by activityViewModels()
+    private val plantInfoViewModel: PlantInfoViewModel by activityViewModels()
 
     // Shared Preference
     private lateinit var sharedPref: SharedPreferences
@@ -100,6 +100,7 @@ class MainFragment : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     Log.d(TAG, "PERMISSION_GRANTED")
+                    //TODO use the ImagePicker object instead
                     showImagePicker()
                 } else
                     checkCameraStoragePermission()
@@ -129,7 +130,7 @@ class MainFragment : Fragment() {
             val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
             // Set the encoded image to the viewModel for further usage
-            viewModel.imageBitmap = imageBitmap
+            plantInfoViewModel.imageBitmap = imageBitmap
 
             // Show the bottom sheet modal with the result
             val modalBottomSheet = DetailsBottomSheetModal()
@@ -140,9 +141,8 @@ class MainFragment : Fragment() {
 
             // Encode the image file to Base64, and POST it to the identify API
             val encodedImage = base64Encoder(imageFile)
-            viewModel.image = encodedImage
-
-            Log.d(TAG, "Encoded Image: $encodedImage")
+            plantInfoViewModel.image = encodedImage
+            Log.d(TAG, "Main encoded image: $encodedImage")
         }
     }
 

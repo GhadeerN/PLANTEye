@@ -2,6 +2,7 @@ package sa.edu.tuwaiq.planteye.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import sa.edu.tuwaiq.planteye.model.DiagnosesDataModel
@@ -24,6 +25,8 @@ interface IPlantIdApi {
     // The POST request will sent an image with other modifiers to diagnose the plant disease
     @POST("/v2/identify")
     suspend fun identifyPlantDisease(
-        @Body identifyDiseaseBody: IdentifyDiseaseBody
+        @Body identifyDiseaseBody: IdentifyDiseaseBody,
+        @Header("Api-key") apiKey: String = "UiPOzaSPxpoKlU8pNoagp03yLAGEdc7pj4lfWB7Xm7Hs1EDGJT"
+
     ): Response<DiagnosesDataModel>
 }

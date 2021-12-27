@@ -53,7 +53,7 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
 
         binding.plantImageView.setImageBitmap(viewModel.imageBitmap)
 
-//        viewModel.callPlantInfo(viewModel.image)
+        viewModel.callPlantInfo(viewModel.image)
 
         // This code is to show expand the bottom sheet on it max height, and add expanded behavior to it
         val bottomSheet = binding.frameLayout

@@ -24,7 +24,11 @@
         android:id="@+id/diagnosesFragment"
         android:name="sa.edu.tuwaiq.planteye.view.main.DiagnosesFragment"
         android:label="fragment_diagnoses"
-        tools:layout="@layout/fragment_diagnoses" />
+        tools:layout="@layout/fragment_diagnoses" >
+        <action
+            android:id="@+id/action_diagnosesFragment_to_diagnoseResultFragment"
+            app:destination="@id/diagnoseResultFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment2"
         android:name="sa.edu.tuwaiq.planteye.view.identity.ProfileFragment"
@@ -45,4 +49,9 @@
         android:name="sa.edu.tuwaiq.planteye.view.main.ArticleContentFragment"
         android:label="fragment_article_content"
         tools:layout="@layout/fragment_article_content" />
+    <fragment
+        android:id="@+id/diagnoseResultFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.DiagnoseResultFragment"
+        android:label="fragment_diagnose_result"
+        tools:layout="@layout/fragment_diagnose_result" />
 </navigation>

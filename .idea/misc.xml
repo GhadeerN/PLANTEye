@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/drawable/ic_articles.xml" value="0.190625" />
+        <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/drawable/ic_plant_placeholder.xml" value="0.190625" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/drawable/ic_scan.xml" value="0.190625" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/drawable/image_round_corners.xml" value="1.065625" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/drawable/round_corner.xml" value="0.190625" />
@@ -14,6 +16,7 @@
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/diagnose_history_item_layout.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_articales.xml" value="0.16033755274261605" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_article_content.xml" value="0.1105072463768116" />
+        <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_diagnose_result.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_diagnoses.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_first.xml" value="0.10099637681159421" />
         <entry key="..\:/Users/gadee/OneDrive/Desktop/T1000/Projects/PLANTEye/app/src/main/res/layout/fragment_identify.xml" value="0.1" />

@@ -70,7 +70,8 @@ class ArticlesAdapter(val context: Context, val viewModel: ArticlesViewModel) :
             binding.apply {
                 articalTitleTextView.text = item.title
                 Glide.with(context)
-                    .load("https://firebasestorage.googleapis.com/v0/b/planteye-85ae5.appspot.com/o/${item.image}?alt=media&token=ce3c9ea0-3be3-48d6-b68a-7712aafa0120")
+                    .load("https://firebasestorage.googleapis.com/v0/b/planteye-85ae5.appspot.com/o/${item.image}?alt=media&token=${item.token}")
+                    .placeholder(R.drawable.ic_plant_placeholder)
                     .into(articalImgImageView)
             }
         }

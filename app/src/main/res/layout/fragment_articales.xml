@@ -30,6 +30,7 @@
             android:id="@+id/articles_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="55dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
