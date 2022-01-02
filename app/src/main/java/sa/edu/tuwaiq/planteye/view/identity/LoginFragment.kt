@@ -17,9 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentLoginBinding
 import sa.edu.tuwaiq.planteye.util.RegisterValidation
-import sa.edu.tuwaiq.planteye.view.FILE_NAME
-import sa.edu.tuwaiq.planteye.view.STATE
-import sa.edu.tuwaiq.planteye.view.USER_ID
+import sa.edu.tuwaiq.planteye.view.*
 
 private const val TAG = "LoginFragment"
 
@@ -57,12 +55,12 @@ class LoginFragment : Fragment() {
 
         observers()
 
-        // Navigate the user to Sign up page (RegisterFragment)
+        // Navigate the user to Sign up page (RegisterFragment) ------------------------------------
         binding.signupTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        // Login Functionality
+        // Login Functionality ---------------------------------------------------------------------
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString().trim()
             val password = binding.loginPassword.text.toString()
@@ -80,7 +78,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        // Forget password? functionality
+        // Forget password? functionality ----------------------------------------------------------
         binding.forgetPasswordTextView.setOnClickListener {
             ResetPasswordDialog().show(
                 requireActivity().supportFragmentManager,
@@ -89,7 +87,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    // Login live data observers
+    // Login live data observers -------------------------------------------------------------------
     private fun observers() {
         viewModel.loginLiveData.observe(viewLifecycleOwner, {
             it?.let {
@@ -101,8 +99,22 @@ class LoginFragment : Fragment() {
                 sharedPrefEditor.commit()
 
                 // If login done successfully direct the user to the main fragments (Articles)
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
+//                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView2, MainFragment()).commit()
+//                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
                 viewModel.loginLiveData.postValue(null)
+            }
+        })
+
+        //TODO NOT SURE ABOUT THIS YET!
+        viewModel.userInfoLiveData.observe(viewLifecycleOwner, {
+            it?.let {
+                val userInfo = mutableSetOf(it.fullName, it.email)
+                sharedPrefEditor.putStringSet(USER_IFO, userInfo).commit()
+                Log.d(TAG, "user info: ${sharedPref.getStringSet(USER_IFO, userInfo)}")
+                Log.d(TAG, "user name: ${sharedPref.getStringSet(USER_IFO, userInfo)?.elementAt(0)}")
+                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
+
+                viewModel.userInfoLiveData.postValue(null)
             }
         })
 
@@ -115,7 +127,7 @@ class LoginFragment : Fragment() {
         })
     }
 
-    // This function is to check the fields validity and show proper error messages to the user
+    // This function is to check the fields validity and show proper error messages to the user ----
     private fun checkLoginValidity(email: String, password: String): Boolean {
         val validator = RegisterValidation()
         var state = true

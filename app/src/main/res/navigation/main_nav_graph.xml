@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/articalesFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.ArticalesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.articles.ArticalesFragment"
         android:label="fragment_articales"
-        tools:layout="@layout/fragment_articales" >
+        tools:layout="@layout/fragment_articales">
         <action
             android:id="@+id/action_articalesFragment_to_profileFragment2"
             app:destination="@id/profileFragment2" />
@@ -22,12 +22,15 @@
     </fragment>
     <fragment
         android:id="@+id/diagnosesFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.DiagnosesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.DiagnosesFragment"
         android:label="fragment_diagnoses"
         tools:layout="@layout/fragment_diagnoses" >
         <action
             android:id="@+id/action_diagnosesFragment_to_diagnoseResultFragment"
             app:destination="@id/diagnoseResultFragment" />
+        <action
+            android:id="@+id/action_diagnosesFragment_to_historyDetailsFragment"
+            app:destination="@id/historyDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment2"
@@ -41,17 +44,22 @@
         tools:layout="@layout/fragment_identify" />
     <fragment
         android:id="@+id/savedPlantsFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsFragment"
         android:label="fragment_saved_plants"
         tools:layout="@layout/fragment_saved_plants" />
     <fragment
         android:id="@+id/articleContentFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.ArticleContentFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.articles.ArticleContentFragment"
         android:label="fragment_article_content"
         tools:layout="@layout/fragment_article_content" />
     <fragment
         android:id="@+id/diagnoseResultFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.DiagnoseResultFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.DiagnoseResultFragment"
         android:label="fragment_diagnose_result"
         tools:layout="@layout/fragment_diagnose_result" />
+    <fragment
+        android:id="@+id/historyDetailsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.HistoryDetailsFragment"
+        android:label="fragment_history_details"
+        tools:layout="@layout/fragment_history_details" />
 </navigation>

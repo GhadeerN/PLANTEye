@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.articles
 
 import android.os.Bundle
 import android.util.Log

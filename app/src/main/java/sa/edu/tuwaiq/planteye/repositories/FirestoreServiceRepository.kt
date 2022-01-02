@@ -33,6 +33,7 @@ class FirestoreServiceRepository {
     fun saveUser(userId: String, user: User) = userCollection.document(userId).set(user)
 
     // Get user info
+    fun getUser(userId: String) = userCollection.document(userId)
 
     // Plant identification ------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ class FirestoreServiceRepository {
     fun getSavedPlantsCollection(userId: String) =
         userCollection.document(userId).collection(SAVED_PLANTS)
 
-    // Update the user note - DON'T WORK!!
+    // Update the user note
     fun updateNote(userId: String, plant: SavedPlants) =
         userCollection.document(userId).collection(SAVED_PLANTS).document(
             plant.plant?.id.toString()
@@ -76,6 +77,14 @@ class FirestoreServiceRepository {
         userCollection.document(userId).collection(DIAGNOSE_RESULTS).document(
             plant.id.toString()
         ).set(plant)
+
+    fun getDiagnoseResultsCollection(userId: String) =
+        userCollection.document(userId).collection(DIAGNOSE_RESULTS)
+
+    fun removeDiagnoseResult(userId: String, plant: DiagnosesDataModel) =
+        userCollection.document(userId).collection(DIAGNOSE_RESULTS).document(
+            plant.id.toString()
+        ).delete()
 
     // Articles ------------------------------------------------------------------------------------
     fun getArticles() = articleCollection

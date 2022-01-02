@@ -20,7 +20,7 @@ import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.DetailsButtomSheetModalBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
-import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
+import sa.edu.tuwaiq.planteye.view.main.savedplants.PlantInfoViewModel
 
 private const val TAG = "DetailsBottomSheetModal"
 class DetailsBottomSheetModal: BottomSheetDialogFragment() {
@@ -89,42 +89,47 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
 
             // Set all plant details in the fragment views
             val plantData = it
-            val suggestion = plantData.suggestions!![0]
+            if (plantData.isPlant!!) {
+                val suggestion = plantData.suggestions!![0]
 
-            binding.detailPlantNameTextView.text = suggestion.plantName
-            binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
-            binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
-            binding.detailsDescriptionTextView.text =
-                suggestion.plantDetails.wikiDescription!!.value
+                binding.detailPlantNameTextView.text = suggestion.plantName
+                binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
+                binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
+                binding.detailsDescriptionTextView.text =
+                    suggestion.plantDetails.wikiDescription!!.value
 
-            val url = suggestion.plantDetails.wikiDescription.citation
+                val url = suggestion.plantDetails.wikiDescription.citation
 
-            // Implicit intent to direct the user to the plant info web page
-            binding.moreInfoButton.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                startActivity(intent)
-            }
-
-            // Show the info layout
-            binding.infoLinearLayout.visibility = View.VISIBLE
-
-            // Note click listener - show the note edit text on user click event
-            binding.addNoteTextView.setOnClickListener {
-                binding.addNoteTextView.visibility = View.GONE
-                binding.outlinedTextFieldNote.visibility = View.VISIBLE
-            }
-
-            // Save plant info
-            binding.savePlantButton.setOnClickListener {
-                // Saved plants object. Why? to add the user note with the plant data and then pass it to the DB repo to save it for this user
-                val savedPlant = SavedPlants(plantData)
-
-                val userNoteText = binding.userNoteTextInput.text.toString()
-                if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
-                    savedPlant.note = userNoteText
+                // Implicit intent to direct the user to the plant info web page
+                binding.moreInfoButton.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(intent)
                 }
 
-                viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
+                // Show the info layout
+                binding.infoLinearLayout.visibility = View.VISIBLE
+
+                // Note click listener - show the note edit text on user click event
+                binding.addNoteTextView.setOnClickListener {
+                    binding.addNoteTextView.visibility = View.GONE
+                    binding.outlinedTextFieldNote.visibility = View.VISIBLE
+                }
+
+                // Save plant info
+                binding.savePlantButton.setOnClickListener {
+                    // Saved plants object. Why? to add the user note with the plant data and then pass it to the DB repo to save it for this user
+                    val savedPlant = SavedPlants(plantData)
+
+                    val userNoteText = binding.userNoteTextInput.text.toString()
+                    if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
+                        savedPlant.note = userNoteText
+                    }
+
+                    viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
+                }
+            } else {
+                //TODO replace it with a nice msg not a toast
+                Toast.makeText(requireActivity(), "Invalid image", Toast.LENGTH_SHORT).show()
             }
         })
 

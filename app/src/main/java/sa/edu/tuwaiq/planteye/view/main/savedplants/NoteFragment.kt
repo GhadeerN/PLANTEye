@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.savedplants
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.ArticleItemLayoutBinding
 import sa.edu.tuwaiq.planteye.model.collections.Article
-import sa.edu.tuwaiq.planteye.view.main.ArticlesViewModel
+import sa.edu.tuwaiq.planteye.view.main.articles.ArticlesViewModel
 
 class ArticlesAdapter(val context: Context, val viewModel: ArticlesViewModel) :
     RecyclerView.Adapter<ArticlesAdapter.ViewHolder>() {
@@ -70,7 +70,8 @@ class ArticlesAdapter(val context: Context, val viewModel: ArticlesViewModel) :
             binding.apply {
                 articalTitleTextView.text = item.title
                 Glide.with(context)
-                    .load("https://firebasestorage.googleapis.com/v0/b/planteye-85ae5.appspot.com/o/${item.image}?alt=media&token=${item.token}")
+                    .load(item.image)
+//                    .load("https://firebasestorage.googleapis.com/v0/b/planteye-85ae5.appspot.com/o/${item.image}?alt=media&token=${item.token}")
                     .placeholder(R.drawable.ic_plant_placeholder)
                     .into(articalImgImageView)
             }

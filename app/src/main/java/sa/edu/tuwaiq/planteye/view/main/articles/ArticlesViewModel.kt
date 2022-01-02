@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.articles
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

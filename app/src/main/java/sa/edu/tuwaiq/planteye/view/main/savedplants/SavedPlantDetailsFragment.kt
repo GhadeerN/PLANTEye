@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.savedplants
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

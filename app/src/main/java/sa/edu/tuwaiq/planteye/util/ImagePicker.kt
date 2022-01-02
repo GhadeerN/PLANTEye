@@ -21,9 +21,12 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.util.*
 
+/* This object is a helper to open the image picker for the user. It will also, provide a base 64 converter,
+*  and check the camera & storage permissions. */
 private const val TAG = "ImagePicker"
 val IMAGE_PICKER = 0
 val REQUEST_CODE_CP = 1
+
 object ImagePicker {
     // This function will open an image selector using Matisse library
     fun showImagePicker(context: Context, fragment: Fragment) {
@@ -33,18 +36,21 @@ object ImagePicker {
             .choose(MimeType.ofImage(), false)
             .capture(true)
             .captureStrategy(CaptureStrategy(true, "sa.edu.tuwaiq.planteye"))
-            .forResult(11)
+            .forResult(IMAGE_PICKER)
     }
 
-    // Since the Plant.id Api only accept base64 string for an image, this function will decode the image file to accomplish that
+    // Base64 converter ----------------------------------------------------------------------------
+    /* Since the Plant.id Api only accept base64 string for an image, this function will decode the
+     * image file to accomplish that */
     fun base64Encoder(file: File): String {
         val bytes = file.readBytes()
         return android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
     }
 
-    // This function is to check the camera and storage permissions
-    // if not granted -> ask for the permissions
-    private fun checkCameraStoragePermission(context: Context) {
+    // Permission checker --------------------------------------------------------------------------
+    /* This function is to check the camera and storage permissions
+     * if not granted -> ask for the permissions */
+    fun checkCameraStoragePermission(context: Context) {
         if (
             ActivityCompat.checkSelfPermission(
                 context,
@@ -60,7 +66,7 @@ object ImagePicker {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             Log.d(TAG, "PERMISSION_DENIED")
-            ActivityCompat.requestPermissions(
+            requestPermissions(
                 context as Activity,
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -74,7 +80,7 @@ object ImagePicker {
 
     // Saved Broken Image
     @RequiresApi(Build.VERSION_CODES.O)
-     fun encoder3(path: String): String {
+    fun encoder3(path: String): String {
         val imagefile = File(path)
         var fis: FileInputStream? = null
         try {

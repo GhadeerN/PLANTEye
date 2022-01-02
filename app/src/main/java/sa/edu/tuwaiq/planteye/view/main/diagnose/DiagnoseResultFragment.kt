@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.diagnose
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -52,38 +52,40 @@ class DiagnoseResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // NOT WORKING!!!
+        binding.diseaseDiagnoseLayout.visibility = View.GONE
+        binding.unproberResultMsg.visibility = View.GONE
+
         observer()
 
-        val imageFile = diagnoseResultViewModel.image
-        val encodedImage = base64Encoder(imageFile)
-        Log.d(TAG, "file: $imageFile")
-        Log.d(TAG, "base64: $encodedImage")
-
-        binding.diseaseDiagnoseLayout.visibility = View.GONE
-
         diagnoseResultViewModel.callDiagnoseResult(
-            diagnoseResultViewModel.path,
+            diagnoseResultViewModel.encodedImage,
             sharedPref.getString(USER_ID, "")!!
         )
 
-        // Convert image to Bitmap to display it in the imageView
+        // Convert image file to Bitmap, and display it in the imageView
+        val imageFile = diagnoseResultViewModel.image
         val imageBitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
         binding.resultDiagnoseImageView.setImageBitmap(imageBitmap)
     }
 
     @SuppressLint("SetTextI18n")
     private fun observer() {
+        // Hide the result layout (why?) it will be shown whenever the API response arrive
+        binding.diseaseDiagnoseLayout.visibility = View.GONE
+        binding.unproberResultMsg.visibility = View.GONE
+
         diagnoseResultViewModel.diagnoseResultLiveData.observe(viewLifecycleOwner, {
             Log.d(TAG, "Success result - live data")
             binding.resultProgressBar.animate().alpha(0f).setDuration(1000)
+            binding.resultProgressBar.visibility = View.GONE
             val result = it
             // To handle the incoming result
             /* if the image was not belong to a plant -> show error message, else check if the plant health state
             *  if healthy -> show hurry message to the user, else -> show the diagnose result
             * */
-            if (it.isPlant) {
-                if (it.healthAssessment.isHealthy) {
+            if (it.isPlant!!) {
+                if (it.healthAssessment!!.isHealthy!!) {
                     binding.unproberResultMsg.visibility = View.VISIBLE
                     binding.unproberResultMsg.text =
                         "Hurry 🎉🎉\nYour plant is healthy!\nThank you for using our services"
@@ -102,24 +104,30 @@ class DiagnoseResultFragment : Fragment() {
             it?.let {
                 Log.d(TAG, "Error live data - $it")
                 binding.resultProgressBar.animate().alpha(0f).setDuration(1000)
-                binding.unproberResultMsg.text = "Error:\nSorry we got a small problem. $it\nPlease try again later"
+                binding.unproberResultMsg.text =
+                    "Error:\nSorry we got a small problem. $it\nPlease try again later"
                 binding.unproberResultMsg.visibility = View.VISIBLE
                 diagnoseResultViewModel.diagnoseResultErrorLiveData.postValue(null)
             }
         })
     }
 
+    fun String.capitalizeWords(): String = split(" ").map { it.capitalize() }.joinToString(" ")
+
     private fun setUpTheResult(result: DiagnosesDataModel) {
         binding.diseaseDiagnoseLayout.visibility = View.VISIBLE
-        val diseaseResult = result.healthAssessment.diseases[0]
+        val diseaseResult = result.healthAssessment!!.diseases!![0]
         // Set up the result values
         binding.resultDiseaseName.text = diseaseResult.name
 
         var commonNames = ""
-        diseaseResult.diseaseDetails.commonNames.forEach {
-            commonNames += "- $it\n"
-        }
-        binding.resultCommonNames.text = commonNames
+        if (diseaseResult.diseaseDetails!!.commonNames != null && diseaseResult.diseaseDetails.commonNames?.size!! > 0) {
+            diseaseResult.diseaseDetails.commonNames.forEach {
+                commonNames += "- ${it.capitalizeWords()}\n"
+            }
+            binding.resultCommonNames.text = commonNames
+        } else
+            binding.resultCommonNames.text = "No common names"
 
         binding.resultDescribtion.text = diseaseResult.diseaseDetails.description
 
@@ -128,10 +136,5 @@ class DiagnoseResultFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
         }
-    }
-
-    private fun base64Encoder(file: File): String {
-        val bytes = file.readBytes()
-        return Base64.encodeToString(bytes, Base64.NO_WRAP)
     }
 }

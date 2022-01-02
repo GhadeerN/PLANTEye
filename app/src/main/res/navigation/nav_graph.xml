@@ -53,7 +53,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/savedPlantsFragment2"
-        android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsFragment"
         android:label="@string/saved_plants"
         tools:layout="@layout/fragment_saved_plants" >
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedPlantDetailsFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.SavedPlantDetailsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantDetailsFragment"
         android:label="@string/plant_details"
         tools:layout="@layout/fragment_saved_plant_details" />
     <dialog

@@ -1,4 +1,4 @@
-package sa.edu.tuwaiq.planteye.view.main
+package sa.edu.tuwaiq.planteye.view.main.articles
 
 import android.content.Context
 import android.media.ImageReader
@@ -74,20 +74,20 @@ class ArticleContentFragment : Fragment() {
     }
 
     //TODO Not sure if its working
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true)
-            {
-                override fun handleOnBackPressed() {
-                    // Leave empty do disable back press or
-                    // write your code which you want
-                    if (binding.webView.canGoBack()) binding.webView.goBack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            callback
-        )
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        val callback: OnBackPressedCallback =
+//            object : OnBackPressedCallback(true)
+//            {
+//                override fun handleOnBackPressed() {
+//                    // Leave empty do disable back press or
+//                    // write your code which you want
+//                    if (binding.webView.canGoBack()) binding.webView.goBack()
+//                }
+//            }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            this,
+//            callback
+//        )
+//    }
 }

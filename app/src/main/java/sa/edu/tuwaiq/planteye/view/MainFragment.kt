@@ -13,12 +13,12 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -26,15 +26,16 @@ import com.zhihu.matisse.internal.entity.CaptureStrategy
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentMainBinding
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
-import sa.edu.tuwaiq.planteye.view.identity.ResetPasswordDialog
-import sa.edu.tuwaiq.planteye.view.main.LoginToContinueDialog
-import sa.edu.tuwaiq.planteye.view.main.PlantInfoViewModel
+import sa.edu.tuwaiq.planteye.util.ImagePicker
+import sa.edu.tuwaiq.planteye.util.NavHelper
+import sa.edu.tuwaiq.planteye.view.main.savedplants.PlantInfoViewModel
 import java.io.File
 
 private const val TAG = "MainFragment"
 const val FILE_NAME = "User log"
 const val STATE = "login_state"
 const val USER_ID = "user_id"
+const val USER_IFO = "user_info"
 
 class MainFragment : Fragment() {
 
@@ -50,8 +51,6 @@ class MainFragment : Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var sharedPrefEditor: SharedPreferences.Editor
 
-    // The user login state
-//    var state = false
 
     // Menu Items
     lateinit var profile: MenuItem
@@ -91,8 +90,12 @@ class MainFragment : Fragment() {
             childFragmentManager.findFragmentById(R.id.fragmentContainerView_main) as NavHostFragment
         navController = navHostFragment.navController
 
-        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+        NavHelper.init(navController)
 
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+        (requireActivity() as MainActivity).setupActionBarWithNavController(navController)
+
+        // Identify plant button -------------------------------------------------------------------
         binding.cameraFloatingActionButton.setOnClickListener {
             if (sharedPref.getBoolean(STATE, false)) {
                 if (ActivityCompat.checkSelfPermission(
@@ -101,9 +104,9 @@ class MainFragment : Fragment() {
                 ) {
                     Log.d(TAG, "PERMISSION_GRANTED")
                     //TODO use the ImagePicker object instead
-                    showImagePicker()
+                    ImagePicker.showImagePicker(requireActivity(), this)
                 } else
-                    checkCameraStoragePermission()
+                    ImagePicker.checkCameraStoragePermission(requireActivity())
             } else {
                 findNavController().navigate(R.id.action_mainFragment2_to_loginToContinueDialog)
 //                LoginToContinueDialog().show(
@@ -114,7 +117,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    // Here we'll catch the result back from the image picker
+    // Catch the result back from the image picker -------------------------------------------------
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -136,7 +139,7 @@ class MainFragment : Fragment() {
             val modalBottomSheet = DetailsBottomSheetModal()
 
             // To force the user to click (X) to close the bottom sheet, instead of clicking outside it or swipe it down to close
-            modalBottomSheet.isCancelable = false
+//            modalBottomSheet.isCancelable = false
             modalBottomSheet.show(requireActivity().supportFragmentManager, "ModalBottomSheet")
 
             // Encode the image file to Base64, and POST it to the identify API

@@ -1,12 +1,7 @@
 package sa.edu.tuwaiq.planteye.view
 
-import android.Manifest
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -14,11 +9,14 @@ import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.ActivityMainBinding
 import sa.edu.tuwaiq.planteye.repositories.ApiServiceRepository
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
+import sa.edu.tuwaiq.planteye.util.NavHelper
 
 private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
-    
+
     lateinit var binding: ActivityMainBinding
+
     // For the action bar
     private lateinit var navController: NavController
 
@@ -42,7 +40,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-
+        if (navController.currentDestination?.label == "PLANTEye") {
+            return NavHelper.get().goBack()
+        } else {
+            return navController.navigateUp() || super.onSupportNavigateUp()
+        }
     }
 }

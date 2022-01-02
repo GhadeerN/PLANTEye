@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DiseasesSimple(
     @SerializedName("name")
-    val name: String,
+    val name: String? = null,
     @SerializedName("probability")
-    val probability: Double
+    val probability: Double? = null
 )

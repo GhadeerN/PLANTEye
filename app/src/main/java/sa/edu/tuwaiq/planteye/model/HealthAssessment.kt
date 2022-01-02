@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class HealthAssessment(
     @SerializedName("diseases")
-    val diseases: List<Disease>,
+    val diseases: List<Disease>? = null,
     @SerializedName("diseases_simple")
-    val diseasesSimple: List<DiseasesSimple>,
+    val diseasesSimple: List<DiseasesSimple>? = null,
     @SerializedName("is_healthy")
-    val isHealthy: Boolean,
+    val isHealthy: Boolean? = null,
     @SerializedName("is_healthy_probability")
-    val isHealthyProbability: Double
+    val isHealthyProbability: Double? = null
 )

@@ -15,7 +15,7 @@ import sa.edu.tuwaiq.planteye.databinding.IdentifyHistoryItemLayoutBinding
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.view.FILE_NAME
 import sa.edu.tuwaiq.planteye.view.USER_ID
-import sa.edu.tuwaiq.planteye.view.main.SavedPlantsViewModel
+import sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsViewModel
 
 private const val TAG = "SavedPlantsAdapter"
 
@@ -103,7 +103,7 @@ class SavedPlantsAdapter(val context: Context, val viewModel: SavedPlantsViewMod
 
                 Glide.with(context).load(item.plant.images!![0].url)
                     .placeholder(R.drawable.ic_plant_placeholder)
-                    .into(binding.itemPlantImageView)
+                    .into(itemPlantImageView)
             }
         }
     }

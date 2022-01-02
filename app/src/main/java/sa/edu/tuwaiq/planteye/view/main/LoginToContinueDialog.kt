@@ -2,6 +2,7 @@ package sa.edu.tuwaiq.planteye.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +10,21 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import sa.edu.tuwaiq.planteye.R
+import sa.edu.tuwaiq.planteye.view.MainActivity
 import sa.edu.tuwaiq.planteye.view.identity.LoginFragment
 import sa.edu.tuwaiq.planteye.view.identity.RegisterFragment
 
 private const val TAG = "LoginToContinueDialog"
 class LoginToContinueDialog: DialogFragment() {
+    private lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +42,14 @@ class LoginToContinueDialog: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val navView = view.findViewById<>()
+//        val navHostFragment =
+//            requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerView_main) as NavHostFragment
+
+//        Log.d(TAG, "navHost: $navHostFragment")
+//        navController = navHostFragment.navController
+//        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+//        (requireActivity() as MainActivity).setupActionBarWithNavController(navController)
 
         // Close the dialog
         val close: ImageView = view.findViewById(R.id.close_login_dialog)
@@ -43,13 +60,14 @@ class LoginToContinueDialog: DialogFragment() {
         // Navigate to login
         val login: Button = view.findViewById(R.id.login_button_dialog)
         login.setOnClickListener {
-            it.findNavController().navigate(R.id.action_loginToContinueDialog_to_loginFragment)
+//            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView2, LoginFragment()).commit()
+            findNavController().navigate(R.id.action_loginToContinueDialog_to_loginFragment)
         }
 
         // Go to register page
         val createAccount: TextView = view.findViewById(R.id.signup_login_dialog)
         createAccount.setOnClickListener {
-            it.findNavController().navigate(R.id.action_loginToContinueDialog_to_registerFragment)
+            findNavController().navigate(R.id.action_loginToContinueDialog_to_registerFragment)
         }
     }
 }

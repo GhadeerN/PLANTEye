@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class DiseaseDetails(
     @SerializedName("classification")
-    val classification: List<String>,
+    val classification: List<String>? = null,
     @SerializedName("common_names")
-    val commonNames: List<String>,
+    val commonNames: List<String>? = null,
     @SerializedName("description")
-    val description: String,
+    val description: String? = null,
     @SerializedName("name")
-    val name: String,
+    val name: String? = null,
     @SerializedName("url")
-    val url: String
+    val url: String? = null
 )

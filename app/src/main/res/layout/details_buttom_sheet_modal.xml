@@ -13,12 +13,12 @@
     <!--        android:layout_height="match_parent"-->
     <!--        android:background="@android:color/transparent"-->
     <!--        >-->
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/frameLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:theme="@style/Theme.MyApplication.AppBarOverlay"-->
-<!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">-->
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--        android:id="@+id/frameLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:theme="@style/Theme.MyApplication.AppBarOverlay"-->
+    <!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -48,7 +48,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.499" />
-
 
 
         <LinearLayout
@@ -81,6 +80,7 @@
 
                         android:layout_gravity="center"
                         tools:layout_editor_absoluteY="184dp" />
+
                     <LinearLayout
                         android:id="@+id/info_linearLayout"
                         android:layout_width="match_parent"
@@ -217,10 +217,10 @@
 
                         <Button
                             android:id="@+id/save_plant_button"
+                            style="@style/SolidButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="18dp"
-                            android:backgroundTint="@color/primary_color_green"
                             android:text="@string/save_this_plant"
                             app:icon="@drawable/ic_baseline_bookmark_border_24"
                             app:iconGravity="textStart" />
@@ -243,7 +243,7 @@
             app:srcCompat="@drawable/ic_baseline_close_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
     <!--    </FrameLayout>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
