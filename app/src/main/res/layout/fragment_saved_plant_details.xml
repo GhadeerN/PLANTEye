@@ -5,52 +5,55 @@
     android:id="@+id/frameLayout9"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.main.SavedPlantDetailsFragment">
+    tools:context=".view.main.savedplants.SavedPlantDetailsFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayout6"
+    <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="6dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UselessParent">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="250dp"
-            android:layout_height="220dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true">
-
-            <ImageView
-                android:id="@+id/plant_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="plant image"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/avatars" />
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/plant_title"
-            style="@style/BoldHeaderStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="TextView" />
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="10dp">
+            android:padding="6dp">
+            <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--        app:layout_constraintStart_toStartOf="parent"-->
+            <!--        app:layout_constraintTop_toTopOf="parent"-->
+            <!--        tools:ignore="UselessParent">-->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="250dp"
+                android:layout_height="220dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="4dp"
+                app:cardUseCompatPadding="true">
+
+                <ImageView
+                    android:id="@+id/plant_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="plant image"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/avatars" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/plant_title"
+                style="@style/BoldHeaderStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="TextView" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -60,10 +63,18 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="500dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:visibility="gone">
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

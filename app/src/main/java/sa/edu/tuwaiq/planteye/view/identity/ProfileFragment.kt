@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -17,8 +18,7 @@ import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentProfileBinding
 import sa.edu.tuwaiq.planteye.model.collections.User
 import sa.edu.tuwaiq.planteye.repositories.FirestoreServiceRepository
-import sa.edu.tuwaiq.planteye.view.FILE_NAME
-import sa.edu.tuwaiq.planteye.view.USER_IFO
+import sa.edu.tuwaiq.planteye.view.*
 import java.lang.StringBuilder
 
 private const val TAG = "ProfileFragment"
@@ -43,8 +43,11 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fullName = sharedPreferences.getStringSet(USER_IFO, null)?.elementAt(1)
-        val email = sharedPreferences.getStringSet(USER_IFO, null)?.elementAt(0)
+
+        // Fill in the user info
+        val fullName = sharedPreferences.getString(USER_NAME, "")
+        val email = sharedPreferences.getString(USER_EMAIL, "")
+
         binding.apply {
             profileFullname.text = "Welcome $fullName"
             profileEmail.text = email
@@ -54,11 +57,18 @@ class ProfileFragment : Fragment() {
         // Logout
         binding.profileLogout.setOnClickListener {
             // 1. clear the share pref
+            val sharedPrefEditor = sharedPreferences.edit()
+            sharedPrefEditor.putString(USER_EMAIL, "")
+            sharedPrefEditor.putString(USER_ID, "")
+            sharedPrefEditor.putString(USER_NAME, "")
+            sharedPrefEditor.putBoolean(STATE, false)
+            sharedPrefEditor.apply()
 
             // 2. logout from Firestore
             FirestoreServiceRepository.get().firebaseAuth.signOut()
 
             // 3. navigate the user to the main fragment again
+            findNavController().popBackStack()
         }
     }
 

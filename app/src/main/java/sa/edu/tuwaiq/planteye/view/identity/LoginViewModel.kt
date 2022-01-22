@@ -46,7 +46,10 @@ class LoginViewModel : ViewModel() {
     }
 
     // Get user info
-    fun getUser(userId: String) {
+    /* This function is to get the user information (full name) from the Firestore. It uses real-time update,
+     * which observe any changes immediately and reflect it in the UI (kinda like live data) and no need for
+     * update or refresh to see changes in the UI */
+    private fun getUser(userId: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
                 val response = firestore.getUser(userId)

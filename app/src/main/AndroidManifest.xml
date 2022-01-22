@@ -19,12 +19,6 @@
         <activity
             android:name=".view.Splash"
             android:theme="@style/SplashTheme"
-            android:exported="false"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".view.MainActivity"
             android:exported="true"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
@@ -33,6 +27,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- This provider is for the image selector - to save it in the specified path -->

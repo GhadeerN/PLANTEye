@@ -12,6 +12,9 @@ import sa.edu.tuwaiq.planteye.databinding.FragmentArticleContentBinding
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
@@ -66,10 +69,29 @@ class ArticleContentFragment : Fragment() {
        in the webView component */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun creteWebView(url: String) {
+
         binding.webView.apply {
             loadUrl(url)
 //            settings.javaScriptEnabled = true
             settings.safeBrowsingEnabled = true
+        }
+
+        binding.webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                super.onProgressChanged(view, newProgress)
+                val progressBar = binding.webViewProgressBar
+                if (newProgress < 100 && progressBar.visibility == ProgressBar.GONE) {
+                    progressBar.visibility = View.VISIBLE
+                    Log.d(TAG, "progress - inside if: $newProgress")
+                }
+                progressBar.progress = newProgress
+                Log.d(TAG, "progress: $newProgress")
+
+                if (newProgress == 100) {
+                    Log.d(TAG, "progress complete: $newProgress")
+                    progressBar.visibility = View.GONE
+                }
+            }
         }
     }
 

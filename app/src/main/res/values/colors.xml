@@ -15,4 +15,5 @@
     <!--  Transparent color: https://stackoverflow.com/questions/11285961/how-to-make-a-background-20-transparent-on-android  -->
     <color name="scan_btn_transparent_green">#3357A99A</color>
     <color name="light_green_more_info">#B2DFDB</color>
+    <color name="light_pink">#FFEEE5</color>
 </resources>

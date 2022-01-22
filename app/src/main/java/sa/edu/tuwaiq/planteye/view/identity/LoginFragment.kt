@@ -32,6 +32,8 @@ class LoginFragment : Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var sharedPrefEditor: SharedPreferences.Editor
 
+    lateinit var snakbarView: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +57,8 @@ class LoginFragment : Fragment() {
 
         observers()
 
+        snakbarView = binding.loginSnakbarView
+
         // Navigate the user to Sign up page (RegisterFragment) ------------------------------------
         binding.signupTextView.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -64,7 +68,6 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString().trim()
             val password = binding.loginPassword.text.toString()
-            val snakbarView = binding.loginSnakbarView
 
             if (checkLoginValidity(email, password)) {
                 progressDialog.show()
@@ -72,7 +75,7 @@ class LoginFragment : Fragment() {
             } else {
                 Snackbar.make(
                     snakbarView,
-                    "Please fill in the require fields",
+                    R.string.fill_required_field,
                     Snackbar.LENGTH_SHORT
                 ).setAnchorView(binding.textView).show()
             }
@@ -91,7 +94,7 @@ class LoginFragment : Fragment() {
     private fun observers() {
         viewModel.loginLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
 
                 // Take the user id from the live data and put it in the shared pref
                 sharedPrefEditor.putString(USER_ID, it)
@@ -108,11 +111,17 @@ class LoginFragment : Fragment() {
         //TODO NOT SURE ABOUT THIS YET!
         viewModel.userInfoLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                val userInfo = mutableSetOf(it.fullName, it.email)
-                sharedPrefEditor.putStringSet(USER_IFO, userInfo).commit()
-                Log.d(TAG, "user info: ${sharedPref.getStringSet(USER_IFO, userInfo)}")
-                Log.d(TAG, "user name: ${sharedPref.getStringSet(USER_IFO, userInfo)?.elementAt(0)}")
-                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
+                progressDialog.dismiss()
+//                val userInfo = mutableSetOf(it.fullName, it.email)
+//                sharedPrefEditor.putStringSet(USER_IFO, userInfo).commit()
+
+                sharedPrefEditor.putString(USER_NAME, it.fullName)
+                sharedPrefEditor.putString(USER_EMAIL, it.email)
+                sharedPrefEditor.commit()
+//                Log.d(TAG, "user info: ${sharedPref.getStringSet(USER_IFO, userInfo)}")
+//                Log.d(TAG, "user name: ${sharedPref.getStringSet(USER_IFO, userInfo)?.elementAt(0)}")
+                findNavController().popBackStack()
+//                findNavController().navigate(R.id.action_loginFragment_to_mainFragment2)
 
                 viewModel.userInfoLiveData.postValue(null)
             }
@@ -121,8 +130,14 @@ class LoginFragment : Fragment() {
         viewModel.loginErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 progressDialog.dismiss()
-                Toast.makeText(requireActivity(), "Incorrect email or password", Toast.LENGTH_LONG)
-                    .show()
+                Snackbar.make(
+                    snakbarView,
+                    R.string.incorrect_email_password,
+                    Snackbar.LENGTH_SHORT
+                ).setAnchorView(binding.textView).show()
+//                Toast.makeText(requireActivity(), "Incorrect email or password", Toast.LENGTH_LONG)
+//                    .show()
+                viewModel.loginErrorLiveData.postValue(null)
             }
         })
     }

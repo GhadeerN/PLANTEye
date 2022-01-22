@@ -26,6 +26,32 @@ class ArticlesViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = firebaseRepo.getArticles()
+
+//                response.addSnapshotListener(MetadataChanges.INCLUDE) { value, error ->
+//                    if (error != null) {
+//                        articlesErrorLiveData.postValue(error.message)
+//                        Log.d(TAG, "SNAPSHOT ERROR: ${error.message}")
+//                        return@addSnapshotListener
+//                    }
+//
+//                    for (doc : DocumentChange in value?.documentChanges!!) {
+//                        if (doc.type == DocumentChange.Type.ADDED) {
+//                            val articleDoc = doc.document.toObject(Article::class.java)
+//                            article.add(articleDoc)
+//                        }
+//                    }
+//                    // TEST - From where the changes are coming
+//                    val source = if (value.metadata.hasPendingWrites())
+//                        "Local"
+//                    else
+//                        "Server"
+//
+//                    Log.d(TAG, "Source of changes: $source")
+//
+//                    articlesLiveData.postValue(article)
+//                    article = mutableListOf()
+//                }
+
                 response.addSnapshotListener(object : EventListener<QuerySnapshot> {
                     override fun onEvent(
                         value: QuerySnapshot?,
@@ -41,9 +67,16 @@ class ArticlesViewModel: ViewModel() {
                             if (doc.type == DocumentChange.Type.ADDED) {
                                 val articleDoc = doc.document.toObject(Article::class.java)
                                 article.add(articleDoc)
-//                                articlesLiveData.postValue(userDoc)
                             }
                         }
+                        // TODO TEST - From where the changes are coming
+                        val source = if (value.metadata.hasPendingWrites())
+                            "Local"
+                        else
+                            "Server"
+
+                        Log.d(TAG, "Source of changes: $source")
+
                         articlesLiveData.postValue(article)
                         article = mutableListOf()
                     }

@@ -10,12 +10,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentSavedPlantDetailsBinding
 import sa.edu.tuwaiq.planteye.view.adapters.DetailFragmentAdapter
 
 /*  This fragment will contains the view pager & layout tabs - so I will initialize the adapter here
 *   Also, the plants details view model will be called here to get the plant image and name */
 private const val TAG = "SavedPlantDetailsFragment"
+
 class SavedPlantDetailsFragment : Fragment() {
 
     lateinit var binding: FragmentSavedPlantDetailsBinding
@@ -28,8 +30,10 @@ class SavedPlantDetailsFragment : Fragment() {
     // To get the user selected item from the SavedPlantsViewModel
     private val viewModel: SavedPlantsViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSavedPlantDetailsBinding.inflate(inflater, container, false)
         return binding.root
@@ -46,8 +50,8 @@ class SavedPlantDetailsFragment : Fragment() {
         adapter = DetailFragmentAdapter(requireActivity().supportFragmentManager, lifecycle)
         viewPager2.adapter = adapter
 
-        TabLayoutMediator(tabLayout, viewPager2) {tab, position ->
-            when(position) {
+        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            when (position) {
                 0 -> tab.text = "Plant Info"
                 1 -> tab.text = "Note"
             }
@@ -58,7 +62,9 @@ class SavedPlantDetailsFragment : Fragment() {
         viewModel.selectedPlantInfo.observe(viewLifecycleOwner, { plant ->
             // Set the plant name and image
             binding.plantTitle.text = plant.plant!!.suggestions!![0].plantName
-            Glide.with(this).load(plant.plant.images!![0].url).into(binding.plantImage)
+            Glide.with(this).load(plant.plant.images!![0].url)
+                .placeholder(R.drawable.ic_plant_placeholder)
+                .into(binding.plantImage)
         })
     }
 }

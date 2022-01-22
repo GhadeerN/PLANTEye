@@ -1,11 +1,15 @@
 package sa.edu.tuwaiq.planteye.util
 
+import android.view.View
+import android.widget.ImageView
 import androidx.navigation.NavController
 
 /* This class is a helper to activate the back button (<-) for the main fragment, science the fragments
 *  cannot override the onSupportNavigateUp function to navigate up.
 *  - The MainFragment contains the NavHostFragment for our main fragments (articles, diagnoses,..etc.) */
 class NavHelper(private val navController: NavController) {
+
+    var imageView: ImageView? = null
 
     companion object {
         var INSTANCE: NavHelper? = null
@@ -21,5 +25,11 @@ class NavHelper(private val navController: NavController) {
 
     fun goBack(): Boolean {
         return navController.navigateUp()
+    }
+
+    fun hideImage() {
+        if (imageView != null) {
+            imageView?.visibility = View.INVISIBLE
+        }
     }
 }

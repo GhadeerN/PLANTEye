@@ -54,6 +54,17 @@
     <string name="password_format">Password most contains:\n- At least 8 characters\n- At
         least one uppercase and lowercase letter\n- At least one symbol\n- At least one number digit</string>
     <string name="login_to_continue">To Continue, Login to PlantEye</string>
-    <string name="discover_beautiful_plants">Discover beautiful plants and read more about gardining</string>
+    <string name="please_login_to_continue">Please login to continue on PlantEye</string>
+    <string name="discover_beautiful_plants">Discover beautiful plants and read more about gardening</string>
     <string name="common_names">Common Names</string>
+
+    <string name="alert_diagnose_title">Are you sure you want to delete this diagnose result?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="fill_required_field">Please fill in the require fields</string>
+    <string name="incorrect_email_password">Incorrect email or password</string>
+    <string name="empty_savedPlant_msg">Your Saved Plants List is Empty</string>
+    <string name="diagnose_result">Diagnose result</string>
+    <string name="identify_plant_health_msg">Identify your plants helth state!</string>
+    <string name="just_scan_msg">Just scan and the AI will know exactly</string>
 </resources>

@@ -22,6 +22,7 @@ import sa.edu.tuwaiq.planteye.view.adapters.SavedPlantsAdapter
 
 /*  The fragment where all user saved plants shown */
 private const val TAG = "SavedPlantsFragment"
+
 class SavedPlantsFragment : Fragment() {
 
     lateinit var binding: FragmentSavedPlantsBinding
@@ -58,12 +59,20 @@ class SavedPlantsFragment : Fragment() {
     private fun observers() {
         viewModel.savedPlantsLiveData.observe(viewLifecycleOwner, {
             binding.savedPlantsProgressBar.animate().alpha(0f).setDuration(1000)
+            binding.savedPlantsProgressBar.visibility = View.GONE
+
+            if (it.isEmpty()) {
+                binding.empltyListLinearLayout.visibility = View.VISIBLE
+            } else {
+                binding.empltyListLinearLayout.visibility = View.GONE
+            }
             plantsAdapter.submitList(it)
         })
 
         viewModel.savedPlantsErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 binding.savedPlantsProgressBar.animate().alpha(0f).setDuration(1000)
+                binding.savedPlantsProgressBar.visibility = View.GONE
                 Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
                 viewModel.savedPlantsErrorLiveData.postValue(null)
             }

@@ -14,6 +14,9 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -30,12 +33,18 @@ import sa.edu.tuwaiq.planteye.util.ImagePicker
 import sa.edu.tuwaiq.planteye.util.NavHelper
 import sa.edu.tuwaiq.planteye.view.main.savedplants.PlantInfoViewModel
 import java.io.File
+import androidx.lifecycle.OnLifecycleEvent
+
+
+
 
 private const val TAG = "MainFragment"
 const val FILE_NAME = "User log"
 const val STATE = "login_state"
 const val USER_ID = "user_id"
 const val USER_IFO = "user_info"
+const val USER_NAME = "user_name"
+const val USER_EMAIL = "user_email"
 
 class MainFragment : Fragment() {
 
@@ -43,6 +52,8 @@ class MainFragment : Fragment() {
     private lateinit var navController: NavController
     private val IMAGE_PICKER = 0
     private val REQUEST_CODE_CP = 1
+
+    val modalBottomSheet = DetailsBottomSheetModal()
 
     // Create instance of the viewModel
     private val plantInfoViewModel: PlantInfoViewModel by activityViewModels()
@@ -95,6 +106,8 @@ class MainFragment : Fragment() {
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
         (requireActivity() as MainActivity).setupActionBarWithNavController(navController)
 
+        NavHelper.get().imageView = binding.plantdetailsImageView
+
         // Identify plant button -------------------------------------------------------------------
         binding.cameraFloatingActionButton.setOnClickListener {
             if (sharedPref.getBoolean(STATE, false)) {
@@ -115,6 +128,7 @@ class MainFragment : Fragment() {
 //                )
             }
         }
+
     }
 
     // Catch the result back from the image picker -------------------------------------------------
@@ -136,11 +150,21 @@ class MainFragment : Fragment() {
             plantInfoViewModel.imageBitmap = imageBitmap
 
             // Show the bottom sheet modal with the result
-            val modalBottomSheet = DetailsBottomSheetModal()
+//            val modalBottomSheet = DetailsBottomSheetModal()
 
             // To force the user to click (X) to close the bottom sheet, instead of clicking outside it or swipe it down to close
 //            modalBottomSheet.isCancelable = false
             modalBottomSheet.show(requireActivity().supportFragmentManager, "ModalBottomSheet")
+            binding.plantdetailsImageView.setImageBitmap(imageBitmap)
+            binding.plantdetailsImageView.visibility = View.VISIBLE
+
+            if (modalBottomSheet.isHidden) {
+                Log.d(TAG, "Hidden bottom sheet")
+//                binding.plantdetailsImageView.visibility = View.GONE
+            } else
+                Log.d(TAG, "NOT Hidden bottom sheet")
+
+
 
             // Encode the image file to Base64, and POST it to the identify API
             val encodedImage = base64Encoder(imageFile)
@@ -239,5 +263,15 @@ class MainFragment : Fragment() {
                 REQUEST_CODE_CP
             )
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
     }
 }

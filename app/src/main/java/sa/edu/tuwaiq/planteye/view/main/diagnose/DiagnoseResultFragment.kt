@@ -48,13 +48,20 @@ class DiagnoseResultFragment : Fragment() {
         return binding.root
     }
 
+    // Hide the result layout (why?) it will be shown whenever the API response arrive -------------
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+        binding.resultProgressBar.visibility = View.VISIBLE
+        binding.diseaseDiagnoseLayout.visibility = View.GONE
+        binding.unproberResultMsg.visibility = View.GONE
+    }
 
+    // ---------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // NOT WORKING!!!
-        binding.diseaseDiagnoseLayout.visibility = View.GONE
-        binding.unproberResultMsg.visibility = View.GONE
 
         observer()
 
@@ -71,15 +78,13 @@ class DiagnoseResultFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun observer() {
-        // Hide the result layout (why?) it will be shown whenever the API response arrive
-        binding.diseaseDiagnoseLayout.visibility = View.GONE
-        binding.unproberResultMsg.visibility = View.GONE
 
         diagnoseResultViewModel.diagnoseResultLiveData.observe(viewLifecycleOwner, {
             Log.d(TAG, "Success result - live data")
             binding.resultProgressBar.animate().alpha(0f).setDuration(1000)
             binding.resultProgressBar.visibility = View.GONE
             val result = it
+
             // To handle the incoming result
             /* if the image was not belong to a plant -> show error message, else check if the plant health state
             *  if healthy -> show hurry message to the user, else -> show the diagnose result

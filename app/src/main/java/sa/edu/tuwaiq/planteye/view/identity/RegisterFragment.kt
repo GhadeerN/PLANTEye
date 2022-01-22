@@ -27,9 +27,7 @@ import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.FragmentRegisterBinding
 import sa.edu.tuwaiq.planteye.model.collections.User
 import sa.edu.tuwaiq.planteye.util.RegisterValidation
-import sa.edu.tuwaiq.planteye.view.FILE_NAME
-import sa.edu.tuwaiq.planteye.view.STATE
-import sa.edu.tuwaiq.planteye.view.USER_ID
+import sa.edu.tuwaiq.planteye.view.*
 import java.lang.Exception
 
 private const val TAG = "RegisterFragment"
@@ -113,6 +111,9 @@ class RegisterFragment : Fragment() {
                 // Change the user login state in the sharePref
                 sharedPrefEditor.putBoolean(STATE, true)
                 sharedPrefEditor.putString(USER_ID, it)
+
+                sharedPrefEditor.putString(USER_NAME, binding.registerFullName.text.toString().trim())
+                sharedPrefEditor.putString(USER_EMAIL, binding.registerEmail.text.toString().trim())
                 sharedPrefEditor.commit()
 
                 findNavController().navigate(R.id.action_registerFragment_to_mainFragment2)

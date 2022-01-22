@@ -43,7 +43,7 @@
     <ImageView
         android:id="@+id/plantdetails_imageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:visibility="gone"
         tools:src="@tools:sample/avatars" />

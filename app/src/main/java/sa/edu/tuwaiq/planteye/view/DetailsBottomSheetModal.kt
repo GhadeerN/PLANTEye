@@ -20,10 +20,12 @@ import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.DetailsButtomSheetModalBinding
 import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
+import sa.edu.tuwaiq.planteye.util.NavHelper
 import sa.edu.tuwaiq.planteye.view.main.savedplants.PlantInfoViewModel
 
 private const val TAG = "DetailsBottomSheetModal"
-class DetailsBottomSheetModal: BottomSheetDialogFragment() {
+
+class DetailsBottomSheetModal : BottomSheetDialogFragment() {
 
     lateinit var binding: DetailsButtomSheetModalBinding
     private val viewModel: PlantInfoViewModel by activityViewModels()
@@ -51,23 +53,23 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
 
         observers()
 
-        binding.plantImageView.setImageBitmap(viewModel.imageBitmap)
+//        binding.plantImageView.setImageBitmap(viewModel.imageBitmap)
 
         viewModel.callPlantInfo(viewModel.image)
 
         // This code is to show expand the bottom sheet on it max height, and add expanded behavior to it
-        val bottomSheet = binding.frameLayout
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-        val layoutParams = bottomSheet.layoutParams
-        val windowHeight = getWindowHeight()
-        Log.d(TAG, behavior.state.toString())
-
-        if (layoutParams != null) {
-            layoutParams.height = windowHeight
-        }
-
-        bottomSheet.layoutParams = layoutParams
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        val bottomSheet = binding.frameLayout
+//        val behavior = BottomSheetBehavior.from(bottomSheet)
+//        val layoutParams = bottomSheet.layoutParams
+//        val windowHeight = getWindowHeight()
+//        Log.d(TAG, behavior.state.toString())
+//
+//        if (layoutParams != null) {
+//            layoutParams.height = windowHeight
+//        }
+//
+//        bottomSheet.layoutParams = layoutParams
+//        behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         // Close the bottom sheet
         binding.closeSheetImageView.setOnClickListener {
@@ -82,10 +84,18 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
         return displayMetrics.heightPixels
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.infoLinearLayout.visibility = View.GONE
+    }
+
     private fun observers() {
         // Plant data observer
         viewModel.plantInfoLiveData.observe(viewLifecycleOwner, {
+            /* This will animate the progress bar fading, but the bar will be still in the view group
+             * even through we can't see it. To solve this problem, set the progressbar visibility to GONE */
             binding.progressBar.animate().alpha(0f).setDuration(1000)
+            binding.progressBar.visibility = View.GONE
 
             // Set all plant details in the fragment views
             val plantData = it
@@ -124,7 +134,10 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
                     if (userNoteText.isNotBlank()) { // if the user added a note save it in the model
                         savedPlant.note = userNoteText
                     }
-
+                    Log.d(
+                        TAG,
+                        "Plant to save: $plantData, userID: ${FirebaseAuth.getInstance().uid!!}"
+                    )
                     viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
                 }
             } else {
@@ -137,7 +150,7 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
         viewModel.plantInfoErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 binding.progressBar.animate().alpha(0f).setDuration(1000)
-                binding.errorMsgTextView.visibility = View.VISIBLE
+//                binding.errorMsgTextView.visibility = View.VISIBLE
                 Toast.makeText(
                     requireActivity(),
                     "Timeout Error: Sorry, please check you intent connection and try again",
@@ -150,11 +163,19 @@ class DetailsBottomSheetModal: BottomSheetDialogFragment() {
         // Save plant observer
         viewModel.savePlantLiveData.observe(viewLifecycleOwner, {
             it?.let {
-                Toast.makeText(requireActivity(), "The plant is saved successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireActivity(),
+                    "The plant is saved successfully!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 viewModel.savePlantLiveData.postValue(null)
-//                return
             }
-//            Toast.makeText(requireContext(), "The plant is already saved!\n Check your bookmark list ❤", Toast.LENGTH_SHORT).show()
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "on pause Details BottomSheetModal")
+        NavHelper.get().hideImage()
     }
 }

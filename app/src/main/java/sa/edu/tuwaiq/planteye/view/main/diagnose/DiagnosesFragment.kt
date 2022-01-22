@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
@@ -67,15 +68,18 @@ class DiagnosesFragment : Fragment() {
 
             historyAdapter = DiagnoseHistoryAdapter(requireActivity(), diagnoseResultViewModel)
             binding.diagnoseHistoryRecyclerView.adapter = historyAdapter
-
+            binding.identifyPlantCardMsg.visibility = View.GONE
             // Get the saved history for the user from the DB
             diagnoseResultViewModel.callDiagnoseHistory(sharedPref.getString(USER_ID, "")!!)
+        } else {
+            binding.identifyPlantCardMsg.visibility = View.VISIBLE
         }
 
         // Plant diagnoses -------------------------------------------------------------------------
         binding.diagnoseScanButton.setOnClickListener {
             // Check first if the user logged in -> if T, open the imagePicker. Else, Ask em to log in
             if (sharedPref.getBoolean(STATE, false)) {
+                binding.loginSnackbar.visibility = View.GONE
                 if (ActivityCompat.checkSelfPermission(
                         requireActivity(), Manifest.permission.CAMERA
                     ) == PackageManager.PERMISSION_GRANTED
@@ -84,9 +88,15 @@ class DiagnosesFragment : Fragment() {
                     ImagePicker.showImagePicker(requireActivity(), this)
                 } else
                     ImagePicker.checkCameraStoragePermission(requireActivity())
-            } else
-            //TODO add the LoginToContinue dialog
-                Toast.makeText(requireContext(), "Please login first", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.loginSnackbar.visibility = View.VISIBLE
+                Snackbar.make(binding.loginSnackbar, R.string.please_login_to_continue, Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(resources.getColor(R.color.design_default_color_error))
+                    .setAnchorView(binding.diagnoseHistoryRecyclerView)
+                    .show()
+                //TODO add the LoginToContinue dialog
+//                Toast.makeText(requireContext(), "Please login first", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -118,7 +128,12 @@ class DiagnosesFragment : Fragment() {
 
     private fun observer() {
         diagnoseResultViewModel.diagnoseHistoryLiveData.observe(viewLifecycleOwner, {
-            historyAdapter.submitList(it)
+            if (it.isEmpty()) {
+                binding.identifyPlantCardMsg.visibility = View.VISIBLE
+            } else {
+                binding.identifyPlantCardMsg.visibility = View.GONE
+                historyAdapter.submitList(it)
+            }
         })
         diagnoseResultViewModel.diagnoseResultErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {

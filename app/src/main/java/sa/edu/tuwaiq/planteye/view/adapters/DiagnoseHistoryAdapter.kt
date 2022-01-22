@@ -83,11 +83,6 @@ class DiagnoseHistoryAdapter(val context: Context, val viewModel: DiagnoseResult
             // Item actions ------------------------------------------------------------------------
             // Display the item details in a dialog. In the item layout click -> open the details page
             itemView.setOnClickListener {
-//                val activity = itemView.context as? MainActivity
-//                HistoryDetailsDialog(item).show(
-//                    activity!!.supportFragmentManager,
-//                    "HistoryDetailsDialog"
-//                )
                 viewModel.selectedDiagnoseResult.postValue(item)
                 Log.d(TAG, "posted the user selected data - $item")
                 it.findNavController().navigate(R.id.action_diagnosesFragment_to_historyDetailsFragment)
@@ -97,12 +92,12 @@ class DiagnoseHistoryAdapter(val context: Context, val viewModel: DiagnoseResult
             // Delete diagnose result from the history
             binding.diagnoseDeleteImageButton.setOnClickListener {
                 MaterialAlertDialogBuilder(context)
-                    .setTitle("Are you sure you want to delete this diagnose result?")
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setTitle(R.string.alert_diagnose_title)
+                    .setNegativeButton(R.string.cancel) { dialog, _ ->
                         // Respond to negative button press
                         dialog.dismiss()
                     }
-                    .setPositiveButton("Delete") { dialog, _ ->
+                    .setPositiveButton(R.string.delete) { dialog, _ ->
                         // Respond to positive button press
                         viewModel.removeDiagnoseResult(sharedPref.getString(USER_ID, "")!!, item)
                         dialog.dismiss()

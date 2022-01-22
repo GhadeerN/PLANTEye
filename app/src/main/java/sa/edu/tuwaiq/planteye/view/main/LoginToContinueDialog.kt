@@ -42,14 +42,6 @@ class LoginToContinueDialog: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val navView = view.findViewById<>()
-//        val navHostFragment =
-//            requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerView_main) as NavHostFragment
-
-//        Log.d(TAG, "navHost: $navHostFragment")
-//        navController = navHostFragment.navController
-//        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
-//        (requireActivity() as MainActivity).setupActionBarWithNavController(navController)
 
         // Close the dialog
         val close: ImageView = view.findViewById(R.id.close_login_dialog)
@@ -60,7 +52,6 @@ class LoginToContinueDialog: DialogFragment() {
         // Navigate to login
         val login: Button = view.findViewById(R.id.login_button_dialog)
         login.setOnClickListener {
-//            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView2, LoginFragment()).commit()
             findNavController().navigate(R.id.action_loginToContinueDialog_to_loginFragment)
         }
 
