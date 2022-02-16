@@ -10,10 +10,10 @@ import sa.edu.tuwaiq.planteye.model.PlantDataModel
 import sa.edu.tuwaiq.planteye.model.body.IdentifyDiseaseBody
 import sa.edu.tuwaiq.planteye.model.body.IdentifyPlantBody
 
-/* Plant.id API is an api */
+/* Plant.id API is an api that use machine learning to identify plant species and diagnose their disease */
 interface IPlantIdApi {
 
-    // This is the common header for all my api requests
+    // This is the common header for the api request below it
     @Headers("Api-key: UiPOzaSPxpoKlU8pNoagp03yLAGEdc7pj4lfWB7Xm7Hs1EDGJT")
 
     // This POST request will send the image (base64)  to the api to identify it
@@ -27,6 +27,5 @@ interface IPlantIdApi {
     suspend fun identifyPlantDisease(
         @Body identifyDiseaseBody: IdentifyDiseaseBody,
         @Header("Api-key") apiKey: String = "UiPOzaSPxpoKlU8pNoagp03yLAGEdc7pj4lfWB7Xm7Hs1EDGJT"
-
     ): Response<DiagnosesDataModel>
 }

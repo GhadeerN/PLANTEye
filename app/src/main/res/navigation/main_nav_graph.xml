@@ -38,11 +38,6 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/identifyFragment"
-        android:name="sa.edu.tuwaiq.planteye.view.main.IdentifyFragment"
-        android:label="fragment_identify"
-        tools:layout="@layout/fragment_identify" />
-    <fragment
         android:id="@+id/savedPlantsFragment"
         android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsFragment"
         android:label="fragment_saved_plants"

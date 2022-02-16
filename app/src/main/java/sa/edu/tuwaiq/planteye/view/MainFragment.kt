@@ -36,13 +36,10 @@ import java.io.File
 import androidx.lifecycle.OnLifecycleEvent
 
 
-
-
 private const val TAG = "MainFragment"
 const val FILE_NAME = "User log"
 const val STATE = "login_state"
 const val USER_ID = "user_id"
-const val USER_IFO = "user_info"
 const val USER_NAME = "user_name"
 const val USER_EMAIL = "user_email"
 
@@ -51,7 +48,6 @@ class MainFragment : Fragment() {
     lateinit var binding: FragmentMainBinding
     private lateinit var navController: NavController
     private val IMAGE_PICKER = 0
-    private val REQUEST_CODE_CP = 1
 
     val modalBottomSheet = DetailsBottomSheetModal()
 
@@ -79,8 +75,6 @@ class MainFragment : Fragment() {
         // Shared pref initialization
         sharedPref = requireActivity().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
         sharedPrefEditor = sharedPref.edit()
-
-//        state = sharedPref.getBoolean(STATE, false)
 
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
@@ -116,16 +110,11 @@ class MainFragment : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     Log.d(TAG, "PERMISSION_GRANTED")
-                    //TODO use the ImagePicker object instead
                     ImagePicker.showImagePicker(requireActivity(), this)
                 } else
                     ImagePicker.checkCameraStoragePermission(requireActivity())
             } else {
                 findNavController().navigate(R.id.action_mainFragment2_to_loginToContinueDialog)
-//                LoginToContinueDialog().show(
-//                    requireActivity().supportFragmentManager,
-//                    "LoginToContinueDialog"
-//                )
             }
         }
 
@@ -150,24 +139,14 @@ class MainFragment : Fragment() {
             plantInfoViewModel.imageBitmap = imageBitmap
 
             // Show the bottom sheet modal with the result
-//            val modalBottomSheet = DetailsBottomSheetModal()
-
-            // To force the user to click (X) to close the bottom sheet, instead of clicking outside it or swipe it down to close
-//            modalBottomSheet.isCancelable = false
             modalBottomSheet.show(requireActivity().supportFragmentManager, "ModalBottomSheet")
+
+            // Show the selected image in the background
             binding.plantdetailsImageView.setImageBitmap(imageBitmap)
             binding.plantdetailsImageView.visibility = View.VISIBLE
 
-            if (modalBottomSheet.isHidden) {
-                Log.d(TAG, "Hidden bottom sheet")
-//                binding.plantdetailsImageView.visibility = View.GONE
-            } else
-                Log.d(TAG, "NOT Hidden bottom sheet")
-
-
-
             // Encode the image file to Base64, and POST it to the identify API
-            val encodedImage = base64Encoder(imageFile)
+            val encodedImage = ImagePicker.base64Encoder(imageFile)
             plantInfoViewModel.image = encodedImage
             Log.d(TAG, "Main encoded image: $encodedImage")
         }
@@ -219,59 +198,4 @@ class MainFragment : Fragment() {
         }
     }
 
-    // This function will open an image selector using Matisse library
-    private fun showImagePicker() {
-        checkCameraStoragePermission()
-
-        Matisse.from(this)
-            .choose(MimeType.ofImage(), false)
-            .capture(true)
-            .captureStrategy(CaptureStrategy(true, "sa.edu.tuwaiq.planteye"))
-            .forResult(IMAGE_PICKER)
-    }
-
-    // Since the Plant.id Api only accept base64 string for an image, this function will decode the image file to accomplish that
-    private fun base64Encoder(file: File): String {
-        val bytes = file.readBytes()
-        return Base64.encodeToString(bytes, Base64.NO_WRAP)
-    }
-
-    // This function is to check the camera and storage permissions
-    // if not granted -> ask for the permissions
-    private fun checkCameraStoragePermission() {
-        if (
-            ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.d(TAG, "PERMISSION_DENIED")
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ),
-                REQUEST_CODE_CP
-            )
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
 }

@@ -67,4 +67,7 @@
     <string name="diagnose_result">Diagnose result</string>
     <string name="identify_plant_health_msg">Identify your plants helth state!</string>
     <string name="just_scan_msg">Just scan and the AI will know exactly</string>
+
+    <string name="health_state_msg">Hurry 🎉🎉\nYour plant is healthy!\nThank you for using our services</string>
+    <string name="not_plant_msg">Unfortunately, it seems the picture you took was not for a plant 😆\nPlease try again with a valid image</string>
 </resources>

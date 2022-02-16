@@ -77,22 +77,4 @@ object ImagePicker {
             )
         }
     }
-
-    // Saved Broken Image
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun encoder3(path: String): String {
-        val imagefile = File(path)
-        var fis: FileInputStream? = null
-        try {
-            fis = FileInputStream(imagefile)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-        val bm = BitmapFactory.decodeStream(fis)
-        val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val b = baos.toByteArray()
-
-        return Base64.getEncoder().encodeToString(b)
-    }
 }

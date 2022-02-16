@@ -93,7 +93,7 @@ class DiagnoseResultFragment : Fragment() {
                 if (it.healthAssessment!!.isHealthy!!) {
                     binding.unproberResultMsg.visibility = View.VISIBLE
                     binding.unproberResultMsg.text =
-                        "Hurry 🎉🎉\nYour plant is healthy!\nThank you for using our services"
+                        getString(R.string.health_state_msg)
                 } else {
                     binding.unproberResultMsg.visibility = View.GONE
                     setUpTheResult(result)
@@ -101,7 +101,7 @@ class DiagnoseResultFragment : Fragment() {
             } else {
                 binding.unproberResultMsg.visibility = View.VISIBLE
                 binding.unproberResultMsg.text =
-                    "Unfortunately, it seems the picture you took was not for a plant 😆\nPlease try again with a valid image"
+                    getString(R.string.not_plant_msg)
             }
         })
 

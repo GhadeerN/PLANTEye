@@ -1,10 +1,8 @@
 package sa.edu.tuwaiq.planteye.view
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +11,11 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import sa.edu.tuwaiq.planteye.R
 import sa.edu.tuwaiq.planteye.databinding.DetailsButtomSheetModalBinding
-import sa.edu.tuwaiq.planteye.model.PlantDataModel
+import sa.edu.tuwaiq.planteye.model.Suggestion
 import sa.edu.tuwaiq.planteye.model.collections.SavedPlants
 import sa.edu.tuwaiq.planteye.util.NavHelper
 import sa.edu.tuwaiq.planteye.view.main.savedplants.PlantInfoViewModel
@@ -32,7 +29,7 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Round shape style (For the card)
+        // Round shape style (For the bottom sheet)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.ThemeOverlay_Demo_BottomSheetDialog)
     }
 
@@ -40,7 +37,7 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DetailsButtomSheetModalBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,28 +45,9 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.infoLinearLayout.visibility = View.GONE
-        binding.progressBar.isVisible = true
-
         observers()
 
-//        binding.plantImageView.setImageBitmap(viewModel.imageBitmap)
-
         viewModel.callPlantInfo(viewModel.image)
-
-        // This code is to show expand the bottom sheet on it max height, and add expanded behavior to it
-//        val bottomSheet = binding.frameLayout
-//        val behavior = BottomSheetBehavior.from(bottomSheet)
-//        val layoutParams = bottomSheet.layoutParams
-//        val windowHeight = getWindowHeight()
-//        Log.d(TAG, behavior.state.toString())
-//
-//        if (layoutParams != null) {
-//            layoutParams.height = windowHeight
-//        }
-//
-//        bottomSheet.layoutParams = layoutParams
-//        behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         // Close the bottom sheet
         binding.closeSheetImageView.setOnClickListener {
@@ -77,19 +55,11 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
         }
     }
 
-    private fun getWindowHeight(): Int {
-        // Calculate window height for fullscreen use
-        val displayMetrics = DisplayMetrics()
-        (context as Activity?)!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return displayMetrics.heightPixels
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.infoLinearLayout.visibility = View.GONE
-    }
-
     private fun observers() {
+        Log.d(
+            TAG,
+            "info:${binding.infoLinearLayout.isVisible}, errorMsg: ${binding.identifyErrorMsg.isVisible}, progress bar: ${binding.progressBar.isVisible}"
+        )
         // Plant data observer
         viewModel.plantInfoLiveData.observe(viewLifecycleOwner, {
             /* This will animate the progress bar fading, but the bar will be still in the view group
@@ -100,24 +70,21 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
             // Set all plant details in the fragment views
             val plantData = it
             if (plantData.isPlant!!) {
+                binding.identifyErrorMsg.visibility = View.GONE
                 val suggestion = plantData.suggestions!![0]
 
-                binding.detailPlantNameTextView.text = suggestion.plantName
-                binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
-                binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
-                binding.detailsDescriptionTextView.text =
-                    suggestion.plantDetails.wikiDescription!!.value
+                fillPlantInfo(suggestion)
 
-                val url = suggestion.plantDetails.wikiDescription.citation
+                // Show the info layout
+                binding.infoLinearLayout.visibility = View.VISIBLE
+
+                val url = suggestion.plantDetails!!.wikiDescription!!.citation
 
                 // Implicit intent to direct the user to the plant info web page
                 binding.moreInfoButton.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     startActivity(intent)
                 }
-
-                // Show the info layout
-                binding.infoLinearLayout.visibility = View.VISIBLE
 
                 // Note click listener - show the note edit text on user click event
                 binding.addNoteTextView.setOnClickListener {
@@ -141,8 +108,11 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
                     viewModel.savePlant(FirebaseAuth.getInstance().uid!!, savedPlant)
                 }
             } else {
-                //TODO replace it with a nice msg not a toast
-                Toast.makeText(requireActivity(), "Invalid image", Toast.LENGTH_SHORT).show()
+                binding.infoLinearLayout.visibility = View.GONE
+                binding.identifyErrorMsg.apply {
+                    visibility = View.VISIBLE
+                    text = getString(R.string.not_plant_msg)
+                }
             }
         })
 
@@ -150,10 +120,11 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
         viewModel.plantInfoErrorLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 binding.progressBar.animate().alpha(0f).setDuration(1000)
+                binding.progressBar.visibility = View.GONE
 //                binding.errorMsgTextView.visibility = View.VISIBLE
                 Toast.makeText(
                     requireActivity(),
-                    "Timeout Error: Sorry, please check you intent connection and try again",
+                    "Timeout Error: Sorry, please check you intent connection and try again later",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -173,9 +144,34 @@ class DetailsBottomSheetModal : BottomSheetDialogFragment() {
         })
     }
 
+    // Handling the result layout content ----------------------------------------------------------
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "on pause Details BottomSheetModal")
+        this.dismiss()
+    }
+
+    // The onPause will help in hiding the user selected image when the bottom sheet is dismissed
+    override fun onDestroy() {
+        super.onDestroy()
         NavHelper.get().hideImage()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // To hide the bottom sheet info layout or the error msg, and show the progress bar
+        binding.progressBar.isVisible = true
+        binding.infoLinearLayout.isVisible = false
+        binding.identifyErrorMsg.isVisible = false
+    }
+
+    // Fill the result layout content --------------------------------------------------------------
+    // The function fills the plant information into the views (components)
+    private fun fillPlantInfo(suggestion: Suggestion) {
+        binding.detailPlantNameTextView.text = suggestion.plantName
+        binding.detailsFamilyTextView.text = suggestion.plantDetails!!.taxonomy!!.family
+        binding.detailsKigndomTextView.text = suggestion.plantDetails.taxonomy!!.kingdom
+        binding.detailsDescriptionTextView.text =
+            suggestion.plantDetails.wikiDescription!!.value
     }
 }

@@ -58,6 +58,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:srcCompat="@drawable/ic_rectangle" />
+
+            <TextView
+                android:id="@+id/identify_error_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="26dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
@@ -68,13 +84,6 @@
                 <!--            app:layout_constraintEnd_toEndOf="parent"-->
                 <!--            app:layout_constraintStart_toStartOf="parent"-->
                 <!--            app:layout_constraintTop_toBottomOf="@+id/plant_imageView">-->
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:srcCompat="@drawable/ic_rectangle" />
 
                 <!--        <ScrollView-->
                 <!--            android:layout_width="match_parent"-->

@@ -27,6 +27,8 @@ class NavHelper(private val navController: NavController) {
         return navController.navigateUp()
     }
 
+    /* This function is to hide the user selected image when the bottom sheet is onPause.
+    *  It's used in the DetailsBottomSheetModal.kt */
     fun hideImage() {
         if (imageView != null) {
             imageView?.visibility = View.INVISIBLE

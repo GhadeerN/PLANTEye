@@ -13,12 +13,12 @@ class FirestoreServiceRepository {
     private val DIAGNOSE_RESULTS = "DiagnoseResults"
     val firebaseAuth = FirebaseAuth.getInstance()
 
-    // Collections
+    // Collections ---------------------------------------------------------------------------------
     private val userCollection = database.collection("users")
     private val articleCollection = database.collection("Articles")
     private val savedPlantsCollection = database.collection("SavedPlants")
 
-    // Identity -------------------------------------------------------------------------------------
+    // Identity ------------------------------------------------------------------------------------
     // Login
     fun login(email: String, password: String) =
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -36,18 +36,13 @@ class FirestoreServiceRepository {
     fun getUser(userId: String) = userCollection.document(userId)
 
     // Plant identification ------------------------------------------------------------------------
-
     // Save this plant - in savedPlant collection, where collection(SavedPlant) -> doc(PlantId) -> (savedPlant, userId) - savedPlantsCollection.document(plant.plant?.id.toString()).set(plant)
     fun savePlant(userId: String, plant: SavedPlants) =
         userCollection.document(userId).collection(SAVED_PLANTS).document(
             plant.plant?.id.toString()
         ).set(plant)
 
-    // Save this plant
-//    fun savePlant(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayUnion(plant))
-
-    // Remove the saved plant - cold be used to remove the plant OR prevent the redundancy in the user note update
-//    fun removePlant(userId: String, plant: PlantDataModel) = userCollection.document(userId).update("savedPlants", FieldValue.arrayRemove(plant))
+    // Remove the saved plant
     fun removePlant(userId: String, plant: SavedPlants) =
         userCollection.document(userId).collection(SAVED_PLANTS).document(
             plant.plant?.id.toString()
@@ -55,8 +50,6 @@ class FirestoreServiceRepository {
 
     // Get user saved Plants info
     // Get the savedPlant collection - to check if the plant id is redundant or not
-//    fun savedPlants(userId: String) = userCollection.document(userId)
-    //TODO new Saved plant
     fun getSavedPlantsCollection(userId: String) =
         userCollection.document(userId).collection(SAVED_PLANTS)
 
@@ -66,10 +59,6 @@ class FirestoreServiceRepository {
             plant.plant?.id.toString()
         ).update("note", plant.note)
 
-    // Update the user note via removing it and adding the new one in one go using set()
-//    fun setPlant(userId: String, plant: List<PlantDataModel>) = userCollection.document(userId).set(
-//        mutableMapOf("savedPlants" to plant), SetOptions.merge()
-//    )
 
     // Disease diagnoses ---------------------------------------------------------------------------
     // Save plant diagnose result

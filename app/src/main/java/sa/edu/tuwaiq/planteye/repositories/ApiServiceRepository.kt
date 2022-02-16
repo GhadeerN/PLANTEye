@@ -18,8 +18,6 @@ class ApiServiceRepository {
 
     private val retrofitApi = retrofitService.create(IPlantIdApi::class.java)
 
-    //TODO Shared preference maybe here
-
     // Identify Plant
     suspend fun identifyPlant(identifyPlantBody: IdentifyPlantBody) =
         retrofitApi.identifyPlant(identifyPlantBody)
@@ -29,7 +27,6 @@ class ApiServiceRepository {
         retrofitApi.identifyPlantDisease(identifyDiseaseBody)
 
     companion object {
-        //TODO may need context here!
         private var instance: ApiServiceRepository? = null
 
         fun init() {

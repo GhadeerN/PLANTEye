@@ -49,12 +49,6 @@ class ArticlesAdapter(val context: Context, val viewModel: ArticlesViewModel) :
 
         // Navigate to the article content page
         holder.itemView.setOnClickListener {
-            //TODO
-//            val plant = mutableListOf<Article>()
-//            plant.addAll(differ.currentList)
-//            plant.removeAt(position)
-//            differ.submitList(plant)
-
             viewModel.selectedArticle.postValue(item)
             it.findNavController().navigate(R.id.action_articalesFragment_to_articleContentFragment)
         }
