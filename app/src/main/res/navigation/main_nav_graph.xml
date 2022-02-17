@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/articalesFragment">
+
+    <fragment
+        android:id="@+id/articalesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.articles.ArticalesFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_articales">
+        <action
+            android:id="@+id/action_articalesFragment_to_profileFragment2"
+            app:destination="@id/profileFragment2" />
+        <action
+            android:id="@+id/action_articalesFragment_to_savedPlantsFragment"
+            app:destination="@id/savedPlantsFragment" />
+        <action
+            android:id="@+id/action_articalesFragment_to_articleContentFragment"
+            app:destination="@id/articleContentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/diagnosesFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.DiagnosesFragment"
+        android:label="@string/diagnose"
+        tools:layout="@layout/fragment_diagnoses">
+        <action
+            android:id="@+id/action_diagnosesFragment_to_diagnoseResultFragment"
+            app:destination="@id/diagnoseResultFragment" />
+        <action
+            android:id="@+id/action_diagnosesFragment_to_historyDetailsFragment"
+            app:destination="@id/historyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="sa.edu.tuwaiq.planteye.view.identity.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/savedPlantsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsFragment"
+        android:label="fragment_saved_plants"
+        tools:layout="@layout/fragment_saved_plants" />
+    <fragment
+        android:id="@+id/articleContentFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.articles.ArticleContentFragment"
+        android:label="@string/articles"
+        tools:layout="@layout/fragment_article_content" />
+    <fragment
+        android:id="@+id/diagnoseResultFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.DiagnoseResultFragment"
+        android:label="@string/diagnose_result"
+        tools:layout="@layout/fragment_diagnose_result" />
+    <fragment
+        android:id="@+id/historyDetailsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.diagnose.HistoryDetailsFragment"
+        android:label="@string/diagnose_result"
+        tools:layout="@layout/fragment_history_details" />
+</navigation>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment2">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.identity.LoginFragment"
+        android:label="@string/login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.identity.RegisterFragment"
+        android:label="@string/register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2"
+            app:popUpTo="@id/mainFragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="sa.edu.tuwaiq.planteye.view.MainFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment2_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_savedPlantsFragment2"
+            app:destination="@id/savedPlantsFragment2" />
+        <action
+            android:id="@+id/action_mainFragment2_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_loginToContinueDialog"
+            app:destination="@id/loginToContinueDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.identity.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/savedPlantsFragment2"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantsFragment"
+        android:label="@string/saved_plants"
+        tools:layout="@layout/fragment_saved_plants" >
+        <action
+            android:id="@+id/action_savedPlantsFragment2_to_savedPlantDetailsFragment"
+            app:destination="@id/savedPlantDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedPlantDetailsFragment"
+        android:name="sa.edu.tuwaiq.planteye.view.main.savedplants.SavedPlantDetailsFragment"
+        android:label="@string/plant_details"
+        tools:layout="@layout/fragment_saved_plant_details" />
+    <dialog
+        android:id="@+id/loginToContinueDialog"
+        android:name="sa.edu.tuwaiq.planteye.view.main.LoginToContinueDialog"
+        android:label="LoginToContinueDialog" >
+        <action
+            android:id="@+id/action_loginToContinueDialog_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginToContinueDialog_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </dialog>
+</navigation>

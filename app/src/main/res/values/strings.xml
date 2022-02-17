@@ -1,3 +1,73 @@
 <resources>
     <string name="app_name">PLANTEye</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_greeting">Hello</string>
+    <string name="login_user_msg">Let’s learn more about plants!</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="question_already_have_account">Already Have Account?</string>
+    <string name="question_dont_have_account">Don\'t Have Account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="register_greeting">Welcome</string>
+    <string name="register_user_msg">Join us in PlantEye and learn more about plants!</string>
+    <string name="register_full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Sign Up</string>
+    <string name="articles">Articles</string>
+    <string name="scan_and_diagnose">Scan and diagnose the plant</string>
+    <string name="floating_button_description">Floating button to open the camera for the user</string>
+    <string name="diagnose">Diagnose</string>
+    <string name="reset_password">Reset Your Password</string>
+    <string name="happen_to_best_msg">It happen to the best of us! Enter your email and we’ll send you the reset instructions.</string>
+    <string name="send_email">Send Email</string>
+    <string name="more_info">More Info</string>
+    <string name="add_note">Add Note</string>
+    <string name="save_this_plant">Save this plant</string>
+    <string name="kingdom">Kingdom</string>
+    <string name="family">Family</string>
+    <string name="description">Description</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Log out</string>
+    <string name="saved_plants">Saved plants</string>
+    <string name="title_activity_splash">Splash</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="add_a_note">Add a note</string>
+    <string name="demo_description">Papaver somniferum, commonly known as the opium poppy or breadseed poppy, is a species of flowering plant in the family Papaveraceae. It is the species of plant from which both opium</string>
+    <string name="demo_family">Roses</string>
+    <string name="demo_kingdom">Plantes</string>
+    <string name="save_note">Save Note</string>
+    <string name="plant_details">Plant Details</string>
+
+    <string name="require">Require</string>
+    <string name="wrong_email_format">Wrong email format! e.g., plant@planteye.com</string>
+    <string name="password_format">Password most contains:\n- At least 8 characters\n- At
+        least one uppercase and lowercase letter\n- At least one symbol\n- At least one number digit</string>
+    <string name="login_to_continue">To Continue, Login to PlantEye</string>
+    <string name="please_login_to_continue">Please login to continue on PlantEye</string>
+    <string name="discover_beautiful_plants">Discover beautiful plants and read more about gardening</string>
+    <string name="common_names">Common Names</string>
+
+    <string name="alert_diagnose_title">Are you sure you want to delete this diagnose result?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="fill_required_field">Please fill in the require fields</string>
+    <string name="incorrect_email_password">Incorrect email or password</string>
+    <string name="empty_savedPlant_msg">Your Saved Plants List is Empty</string>
+    <string name="diagnose_result">Diagnose result</string>
+    <string name="identify_plant_health_msg">Identify your plants helth state!</string>
+    <string name="just_scan_msg">Just scan and the AI will know exactly</string>
+
+    <string name="health_state_msg">Hurry 🎉🎉\nYour plant is healthy!\nThank you for using our services</string>
+    <string name="not_plant_msg">Unfortunately, it seems the picture you took was not for a plant 😆\nPlease try again with a valid image</string>
 </resources>
